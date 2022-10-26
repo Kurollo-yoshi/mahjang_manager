@@ -95,8 +95,8 @@ def circle_graph(dataframe):
         )
         fig.update_layout(
             autosize=True,
-            height=150,
-            width=150,
+            height=300,
+            width=300,
             margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
             showlegend=False,
         modebar_remove=[
@@ -122,7 +122,7 @@ def chart_graph_rank(dataframe):
             )
         )
     fig.update_layout(
-        height=500,
+        height=300,
         width=800,
         plot_bgcolor = "#202020",
         title=dict(
@@ -166,7 +166,7 @@ def chart_graph_point(dataframe):
             )
         )
     fig.update_layout(
-        height=500,
+        height=300,
         width=800,
         plot_bgcolor = "#202020",
         title=dict(
@@ -256,7 +256,7 @@ def login_func():
 st.set_page_config(
     page_title="友人戦成績管理アプリ",
     page_icon="mahjang_manager/01_data/icon.png",
-    layout="centered"
+    layout="wide"
 )
 
 # Title
