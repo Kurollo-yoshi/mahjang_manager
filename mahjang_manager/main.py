@@ -258,7 +258,7 @@ def login_func():
 st.set_page_config(
     page_title="友人戦成績管理アプリ",
     page_icon="mahjang_manager/01_data/icon.png",
-    layout="wide"
+    layout="centered"
 )
 
 # Title
