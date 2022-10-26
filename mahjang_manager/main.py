@@ -34,14 +34,6 @@ player_4 = "Kurollo"
 # DB上の名前の定義
 name_list = ["紅花さん","ルチチ","Tamasuke","Kurollo"]
 
-# DB上の定義の名前と表示名称の辞書
-name_dict = {
-    "ayaka" : player_1,
-    "rutiti" : player_2,
-    "tama" : player_3,
-    "kurollo" : player_4
-}
-
 # アプリ機能
 mode_1 = "全期間集計"
 mode_2 = "一日集計"
@@ -79,7 +71,7 @@ def circle_graph(dataframe):
         rank_3rd = (rank_df[name_list[i]] == 3).sum()
         rank_4th = (rank_df[name_list[i]] == 4).sum()
         # グラフの表示
-        tmp_columns.subheader(name_dict[name_list[i]])
+        tmp_columns.subheader(name_list[i])
         fig = go.Figure()
         fig.add_trace(
             go.Pie(
@@ -114,7 +106,7 @@ def chart_graph(dataframe):
             go.Scatter(
                 x = rank_df.index,
                 y = rank_df[tmp_name],
-                name = name_dict[name_list[i]],
+                name = name_list[i],
                 marker = dict(
                     line=dict(width=3)
                 )
@@ -153,7 +145,7 @@ def chart_graph(dataframe):
             go.Scatter(
                 x = score_value.index,
                 y = cumsum_data[tmp_name],
-                name = name_dict[name_list[i]],
+                name = name_list[i],
                 marker = dict(
                     line=dict(width=3)
                 )
