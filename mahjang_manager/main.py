@@ -238,6 +238,20 @@ def login_func():
             st.session_state.login = False
             return st.session_state.login
 
+def get_some_data():
+    # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
+    data_lsit = []
+    for tmp_data in db.fetch().items:
+        data_lsit.append(tmp_data["data"]+[tmp_data["date"]]+[tmp_data["key"]])
+
+    df_all_data = pd.DataFrame(data_lsit)
+    df_all_data.columns = name_list + ["Date","key"]
+
+    # データの最大、最小時間
+    raw_min_date = df_all_data["Date"].min()
+    raw_max_date = df_all_data["Date"].max()
+    return df_all_data, raw_min_date, raw_max_date
+
 ## Main
 ## -------------------------------------------------------------------------------
 st.set_page_config(
@@ -255,17 +269,7 @@ st.image(header_img,use_column_width=True)
 deta = Deta(st.secrets["deta_key"])
 db = deta.Base("mahjang_manager_db")
 
-# 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
-data_lsit = []
-for tmp_data in db.fetch().items:
-    data_lsit.append(tmp_data["data"]+[tmp_data["date"]]+[tmp_data["key"]])
-
-df_all_data = pd.DataFrame(data_lsit)
-df_all_data.columns = name_list + ["Date","key"]
-
-# データの最大、最小時間
-raw_min_date = df_all_data["Date"].min()
-raw_max_date = df_all_data["Date"].max()
+df_all_data, raw_min_date, raw_max_date = get_some_data()
 
 # Select Mode
 mode = st.selectbox("機能選択",[mode_1,mode_2,mode_3, mode_4])
@@ -285,10 +289,10 @@ try:
     elif mode==mode_3: # 入力
         if login_func():
                 st.markdown("## 順位点を入力")
-                player_1_value = st.number_input(player_1)
-                player_2_value = st.number_input(player_2)
-                player_3_value = st.number_input(player_3)
-                player_4_value = st.number_input(player_4)
+                player_1_value = st.number_input(name_list[0])
+                player_2_value = st.number_input(name_list[1])
+                player_3_value = st.number_input(name_list[2])
+                player_4_value = st.number_input(name_list[3])
                 sum_values = sum([player_1_value,player_2_value,player_3_value,player_4_value])
                 if st.button("データを登録"):
                     if sum_values==0:
