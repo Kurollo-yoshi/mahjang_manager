@@ -324,7 +324,7 @@ try:
                     st.warning("入力値が不正です")
 
     elif mode==mode_4: # 入力済みの対局データを取得
-        if login_func():
+	if login_func():
             # 日時を元にDBからデータを取得
             display_dataframe = select2dataframe(raw_start_date, raw_end_date).set_index("id")
             gb = GridOptionsBuilder.from_dataframe(display_dataframe, editable=True)
