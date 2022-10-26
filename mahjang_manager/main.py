@@ -300,31 +300,31 @@ try:
         display_func(display_dataframe)
 
     elif mode==mode_3: # 入力
-	if login_func():
-            st.markdown("## 順位点を入力")
-            player_1_value = st.number_input(player_1)
-            player_2_value = st.number_input(player_2)
-            player_3_value = st.number_input(player_3)
-            player_4_value = st.number_input(player_4)
-            sum_values = sum([player_1_value,player_2_value,player_3_value,player_4_value])
-            if st.button("データを登録"):
-                if sum_values==0:
-                    st.write(player_1_value)
-                    st.write(player_2_value)
-                    st.write(player_3_value)
-                    st.write(player_4_value)
-                    conn = sqlite3.connect(dbname)
-                    cur = conn.cursor()
-                    data = [str(datetime.datetime.now().date()), player_1_value, player_2_value, player_3_value, player_4_value]
-                    cur.execute(spl_insert, data)
-                    conn.commit()
-                    cur.close()
-                    conn.close()
-                else:
-                    st.warning("入力値が不正です")
+        if login_func():
+                st.markdown("## 順位点を入力")
+                player_1_value = st.number_input(player_1)
+                player_2_value = st.number_input(player_2)
+                player_3_value = st.number_input(player_3)
+                player_4_value = st.number_input(player_4)
+                sum_values = sum([player_1_value,player_2_value,player_3_value,player_4_value])
+                if st.button("データを登録"):
+                    if sum_values==0:
+                        st.write(player_1_value)
+                        st.write(player_2_value)
+                        st.write(player_3_value)
+                        st.write(player_4_value)
+                        conn = sqlite3.connect(dbname)
+                        cur = conn.cursor()
+                        data = [str(datetime.datetime.now().date()), player_1_value, player_2_value, player_3_value, player_4_value]
+                        cur.execute(spl_insert, data)
+                        conn.commit()
+                        cur.close()
+                        conn.close()
+                    else:
+                        st.warning("入力値が不正です")
 
     elif mode==mode_4: # 入力済みの対局データを取得
-	if login_func():
+        if login_func():
             # 日時を元にDBからデータを取得
             display_dataframe = select2dataframe(raw_start_date, raw_end_date).set_index("id")
             gb = GridOptionsBuilder.from_dataframe(display_dataframe, editable=True)
