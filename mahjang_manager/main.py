@@ -17,7 +17,7 @@ import os
 ## -------------------------------------------------------------------------------
 
 # DBのファイル名
-dbname = "/01_data/mahjang.db"
+dbname = "mahjang_manager/01_data/mahjang.db"
 
 # プレイヤー名
 player_1 = "紅花さん"
@@ -257,14 +257,13 @@ def login_func():
 ## -------------------------------------------------------------------------------
 st.set_page_config(
     page_title="友人戦成績管理アプリ",
-    page_icon="/01_data/icon.png",
+    page_icon="mahjang_manager/01_data/icon.png",
     layout="wide"
 )
 
 # Title
 st.title("友人戦成績管理アプリ")
-#header_img = Image.open("/01_data/head.webp")
-header_img = Image.open(os.getcwd())
+header_img = Image.open("mahjang_manager/01_data/head.webp")
 st.image(header_img,use_column_width=True)
 
 # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
