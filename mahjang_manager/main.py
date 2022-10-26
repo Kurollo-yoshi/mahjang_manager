@@ -8,10 +8,9 @@ from PIL import Image
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
+from deta import Deta
 
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
-
-import os
 
 ## Config
 ## -------------------------------------------------------------------------------
@@ -272,6 +271,9 @@ st.set_page_config(
 st.title(app_title)
 header_img = Image.open(header_image)
 st.image(header_img,use_column_width=True)
+
+# Detaに接続
+deta = Deta(st.secrets["deta_key"])
 
 # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
 conn = sqlite3.connect(dbname)
