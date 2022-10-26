@@ -49,14 +49,6 @@ chart_width = 900
 
 ## Function
 ## -------------------------------------------------------------------------------
-def select2dataframe(start, end):
-    """データベースからデータを取得し、dataframeに格納
-    """
-    conn = sqlite3.connect(dbname)
-    dataframe = pd.read_sql(sql_select, conn, params=[str(start), str(end)])
-    conn.close()
-    return dataframe
-
 def circle_graph(dataframe):
     """順位率の円グラフを作成
     """
@@ -310,14 +302,13 @@ try:
     elif mode==mode_4: # 入力済みの対局データを取得
         if login_func():
             # 日時を元にDBからデータを取得
-            display_dataframe = select2dataframe(raw_start_date, raw_end_date).set_index("id")
-            gb = GridOptionsBuilder.from_dataframe(display_dataframe, editable=True)
+            gb = GridOptionsBuilder.from_dataframe(df_all_data, editable=True)
             gb.configure_selection(selection_mode="multiple", use_checkbox=True)
             gb.configure_pagination()
             gridOptions = gb.build()
             st.write("データを編集する際は変更後にチェックをいれること")	
             data = AgGrid(
-                display_dataframe,
+                df_all_data,
                 gridOptions=gridOptions,
                 enable_enterprise_modules=True,
                 allow_unsafe_jscode=True,
