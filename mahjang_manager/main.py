@@ -191,7 +191,7 @@ def chart_graph(dataframe):
     # グリッドの調整
     fig.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
-    col1.plotly_chart(fig, config=dict({'displaylogo': False}))
+    col2.plotly_chart(fig, config=dict({'displaylogo': False}))
 
 def chart_graph_point(dataframe):
     """折れ線グラフを表示
