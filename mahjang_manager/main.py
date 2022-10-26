@@ -95,8 +95,8 @@ def circle_graph(dataframe):
         )
         fig.update_layout(
             autosize=True,
-            height=100,
-            width=100,
+            height=150,
+            width=150,
             margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
             showlegend=False,
         modebar_remove=[
@@ -122,9 +122,8 @@ def chart_graph_rank(dataframe):
             )
         )
     fig.update_layout(
-        height=200,
-        width=600,
-        autosize=True,
+        height=500,
+        width=800,
         plot_bgcolor = "#202020",
         title=dict(
             text="対戦記録(順位)",
@@ -167,9 +166,8 @@ def chart_graph_point(dataframe):
             )
         )
     fig.update_layout(
-        height=200,
-        width=600,
-        autosize=True,
+        height=500,
+        width=800,
         plot_bgcolor = "#202020",
         title=dict(
             text="対戦記録(ポイント)",
