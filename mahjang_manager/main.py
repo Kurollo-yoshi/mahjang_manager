@@ -45,7 +45,7 @@ mode_4 = "管理"
 circle_size = 300
 # 線グラフ
 chart_height = None
-chart_width = None
+chart_width = 700
 
 ## Function
 ## -------------------------------------------------------------------------------
