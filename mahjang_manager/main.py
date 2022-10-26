@@ -328,6 +328,7 @@ try:
             gb.configure_selection(selection_mode="multiple", use_checkbox=True)
             gb.configure_pagination()
             gridOptions = gb.build()
+            st.write("データを編集する際は変更後にチェックをいれること")	
             data = AgGrid(
                 display_dataframe,
                 gridOptions=gridOptions,
