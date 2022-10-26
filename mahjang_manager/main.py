@@ -121,7 +121,7 @@ def chart_graph_rank(dataframe):
             )
         )
     fig.update_layout(
-        height=300,
+        height=500,
         width=800,
         plot_bgcolor = "#202020",
         title=dict(
@@ -165,7 +165,7 @@ def chart_graph_point(dataframe):
             )
         )
     fig.update_layout(
-        height=300,
+        height=500,
         width=800,
         plot_bgcolor = "#202020",
         title=dict(
