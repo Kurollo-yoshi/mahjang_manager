@@ -1,2 +1,2 @@
 # mahjang_manager
-雀魂友人戦の成績管理ツール
+streamlitで実装した雀魂友人戦の成績管理ツール
