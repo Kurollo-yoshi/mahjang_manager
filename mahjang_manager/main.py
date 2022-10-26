@@ -322,8 +322,7 @@ try:
                 for i in range(len(selection_data)):
                     update_value = {
                         "data":[selection_data[i][name_list[0]],selection_data[i][name_list[1]],selection_data[i][name_list[2]],selection_data[i][name_list[3]]],
-                        "date":selection_data[i]["Date"],
-                        "key":None
+                        "date":selection_data[i]["Date"]
                     }
                     db.update(update_value, selection_data[i]["key"])
 
