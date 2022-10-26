@@ -44,7 +44,7 @@ mode_4 = "管理"
 # 円グラフ
 circle_size = 300
 # 線グラフ
-chart_height = 600
+chart_height = 450
 chart_width = 900
 
 ## Function
@@ -115,7 +115,7 @@ def chart_graph(dataframe):
     fig.update_layout(
         height=chart_height,
         width=chart_width,
-	#autosize=True,
+	autosize=True,
         plot_bgcolor = "#202020",
         xaxis=dict(dtick=5),
         yaxis=dict(title="順位",dtick=1,autorange='reversed'),
@@ -154,7 +154,7 @@ def chart_graph(dataframe):
     fig.update_layout(
         height=chart_height,
         width=chart_width,
-	#autosize=True,
+	autosize=True,
         plot_bgcolor = "#202020",
         xaxis=dict(dtick=5),
         yaxis=dict(title="ポイント"),
