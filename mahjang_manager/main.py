@@ -241,17 +241,24 @@ def login_user(username,password):
 def login_func():
     """ログイン機能
     """
+    if "login" not in st.session_state:
+        st.session_state.login = False
     username = st.text_input("ユーザー名を入力してください")
     password = st.text_input("パスワードを入力してください", type="password")
+
+    if st.session_state.login:
+        return True
     if st.button("ログイン"):
         hashed_pswd = make_hashes(password)
         result = login_user(username,check_hashes(password,hashed_pswd))
         if result:
             st.success("ログインしました")
-            return True
+            st.session_state.login = True
+            return st.session_state.login
         else:
             st.success("ユーザー名かパスワードが間違っています")
-            return False
+            st.session_state.login = False
+            return st.session_state.login
 
 ## Main
 ## -------------------------------------------------------------------------------
@@ -293,7 +300,7 @@ try:
         display_func(display_dataframe)
 
     elif mode==mode_3: # 入力
-        if login_func():
+	if login_func():
             st.markdown("## 順位点を入力")
             player_1_value = st.number_input(player_1)
             player_2_value = st.number_input(player_2)
