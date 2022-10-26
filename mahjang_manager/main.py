@@ -238,7 +238,7 @@ def get_some_data():
 
     df_all_data = pd.DataFrame(data_lsit)
     df_all_data.columns = name_list + ["Date","key"]
-    df_all_data.sort_values("Date",ascending=False)
+    df_all_data = df_all_data.sort_values("Date",ascending=False)
 
     # データの最大、最小時間
     raw_min_date = df_all_data["Date"].min()
