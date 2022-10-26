@@ -165,6 +165,7 @@ def chart_graph_point(dataframe):
             )
         )
     fig.update_layout(
+	atuosize=True,
         height=500,
         width=800,
         plot_bgcolor = "#202020",
