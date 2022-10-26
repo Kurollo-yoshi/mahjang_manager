@@ -44,8 +44,8 @@ mode_4 = "管理"
 # 円グラフ
 circle_size = 300
 # 線グラフ
-chart_height = 300
-chart_width = 700
+chart_height = 600
+chart_width = 900
 
 ## Function
 ## -------------------------------------------------------------------------------
