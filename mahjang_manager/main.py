@@ -309,10 +309,6 @@ try:
                 sum_values = sum([player_1_value,player_2_value,player_3_value,player_4_value])
                 if st.button("データを登録"):
                     if sum_values==0:
-                        st.write(player_1_value)
-                        st.write(player_2_value)
-                        st.write(player_3_value)
-                        st.write(player_4_value)
                         conn = sqlite3.connect(dbname)
                         cur = conn.cursor()
                         data = [str(datetime.datetime.now().date()), player_1_value, player_2_value, player_3_value, player_4_value]
