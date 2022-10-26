@@ -94,7 +94,6 @@ def circle_graph(dataframe):
             textinfo = 'label+percent'
         )
         fig.update_layout(
-            autosize=True,
             height=300,
             width=300,
             margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
