@@ -345,7 +345,6 @@ try:
                 cur.close()
                 conn.close()
                 st.success("情報が更新されました")
-	
 	    if st.button("削除"):
 		conn = sqlite3.connect(dbname)
                 cur = conn.cursor()
