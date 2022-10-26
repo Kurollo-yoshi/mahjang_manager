@@ -351,10 +351,10 @@ try:
                 cur = conn.cursor()
                 for i in range(len(selection_data)):
                     cur.execute(delete_sql, selection_data[i]["rowIndex"]+1)
-            conn.commit()
-            cur.close()
-            conn.close()
-            st.success("データが削除されました")
+                conn.commit()
+                cur.close()
+                conn.close()
+                st.success("データが削除されました")
 
 except Exception as e:
     raise
