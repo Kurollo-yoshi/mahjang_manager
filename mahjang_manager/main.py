@@ -11,6 +11,8 @@ import plotly.graph_objects as go
 
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
+import os
+
 ## Config
 ## -------------------------------------------------------------------------------
 
@@ -261,7 +263,8 @@ st.set_page_config(
 
 # Title
 st.title("友人戦成績管理アプリ")
-header_img = Image.open("/01_data/head.webp")
+#header_img = Image.open("/01_data/head.webp")
+header_img = Image.open(os.getcwd())
 st.image(header_img,use_column_width=True)
 
 # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
