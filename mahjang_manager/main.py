@@ -107,7 +107,7 @@ def circle_graph(dataframe):
 def chart_graph(dataframe):
     """折れ線グラフを表示
     """
-    col1, col2 = st.columns(2)
+    col2, col1 = st.columns(2)
     col1.subheader("対戦記録(ポイント)")
     fig = go.Figure()
     rank_df = dataframe[name_list].rank(axis=1, ascending=False).astype("int")
