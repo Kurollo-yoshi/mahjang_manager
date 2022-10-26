@@ -121,8 +121,9 @@ def chart_graph_rank(dataframe):
             )
         )
     fig.update_layout(
-        height=500,
-        width=800,
+        height=None,
+        width=None,
+	autosize=True,
         plot_bgcolor = "#202020",
         title=dict(
             text="対戦記録(順位)",
@@ -165,9 +166,9 @@ def chart_graph_point(dataframe):
             )
         )
     fig.update_layout(
+        height=None,
+        width=None,
 	autosize=True,
-        height=500,
-        width=800,
         plot_bgcolor = "#202020",
         title=dict(
             text="対戦記録(ポイント)",
