@@ -95,8 +95,8 @@ def circle_graph(dataframe):
         )
         fig.update_layout(
             autosize=True,
-            height=200,
-            width=200,
+            height=100,
+            width=100,
             margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
             showlegend=False,
         modebar_remove=[
@@ -122,8 +122,8 @@ def chart_graph_rank(dataframe):
             )
         )
     fig.update_layout(
-        height=500,
-        width=1500,
+        height=200,
+        width=600,
         autosize=True,
         plot_bgcolor = "#202020",
         title=dict(
@@ -167,8 +167,8 @@ def chart_graph_point(dataframe):
             )
         )
     fig.update_layout(
-        height=500,
-        width=1500,
+        height=200,
+        width=600,
         autosize=True,
         plot_bgcolor = "#202020",
         title=dict(
