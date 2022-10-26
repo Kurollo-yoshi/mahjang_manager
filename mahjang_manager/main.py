@@ -97,7 +97,7 @@ def chart_graph(dataframe):
     for i, tmp_name in enumerate(name_list):
         fig.add_trace(
             go.Scatter(
-                x = rank_df.index,
+                x = [i for i in range(len(rank_df.index))],
                 y = rank_df[tmp_name],
                 name = name_list[i],
                 marker = dict(
@@ -136,7 +136,7 @@ def chart_graph(dataframe):
     for i, tmp_name in enumerate(name_list):
         fig.add_trace(
             go.Scatter(
-                x = score_value.index,
+                x = [i for i in range(len(score_value.index))],
                 y = cumsum_data[tmp_name],
                 name = name_list[i],
                 marker = dict(
