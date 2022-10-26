@@ -316,7 +316,7 @@ try:
                         conn.commit()
                         cur.close()
                         conn.close()
-                        st.sucess("データが登録されました")
+                        st.success("データが登録されました")
                     else:
                         st.warning("入力値が不正です")
 
