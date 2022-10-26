@@ -322,7 +322,7 @@ try:
                     db.update(
                         {
                             "data":[selection_data[i][name_list[0]],selection_data[i][name_list[1]],selection_data[i][name_list[2]],selection_data[i][name_list[3]]],
-			    "date":selection_data[i]["Date"]
+			    "date":selection_data[i]["Date"],
 			    "key":None
                         },
                         selection_data[i]["key"]
