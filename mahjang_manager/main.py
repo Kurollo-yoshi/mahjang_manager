@@ -238,6 +238,7 @@ def get_some_data():
 
     df_all_data = pd.DataFrame(data_lsit)
     df_all_data.columns = name_list + ["Date","key"]
+    df_all_data.sort_values("Date",ascending=False)
 
     # データの最大、最小時間
     raw_min_date = df_all_data["Date"].min()
@@ -317,24 +318,19 @@ try:
 
             selection_data = data["selected_rows"]
             if st.button("更新"):
-                conn = sqlite3.connect(dbname)
-                cur = conn.cursor()
                 for i in range(len(selection_data)):
-                    data = [selection_data[i]["ayaka"], selection_data[i]["rutiti"], selection_data[i]["tama"], selection_data[i]["kurollo"], selection_data[i]["rowIndex"]+1]
-                    cur.execute(update_sql, data)
-                conn.commit()
-                cur.close()
-                conn.close()
+		    db.update(
+			    {
+		              	"data":[selection_data[i][name_list[0]],selection_data[i][name_list[1]],selection_data[i][name_list[2]],selection_data[i][name_list[3]]],
+				"key":None
+		            },
+			    selection_data[i]["key"]
+		    )
                 st.success("情報が更新されました")
 
             if st.button("削除"):
-                conn = sqlite3.connect(dbname)
-                cur = conn.cursor()
                 for i in range(len(selection_data)):
-                    cur.execute(delete_sql, [selection_data[i]["rowIndex"]+1])
-                conn.commit()
-                cur.close()
-                conn.close()
+		    db.delete(selection_data[i]["key"])
                 st.success("データが削除されました")
 
 except Exception as e:
