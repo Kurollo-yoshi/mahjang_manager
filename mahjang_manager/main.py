@@ -15,9 +15,16 @@ import os
 
 ## Config
 ## -------------------------------------------------------------------------------
-
-# DBのファイル名
+# ファイルパス
+# DB
 dbname = "mahjang_manager/01_data/mahjang.db"
+# ヘッダー画像
+header_image = "mahjang_manager/01_data/head.webp"
+# アイコン画像
+icon_image = "mahjang_manager/01_data/icon.png"
+
+# アプリ名
+app_title = "友人戦成績管理アプリ"
 
 # プレイヤー名
 player_1 = "紅花さん"
@@ -42,10 +49,12 @@ mode_2 = "一日集計"
 mode_3 = "入力"
 mode_4 = "管理"
 
-#  ユーザー情報
-names = ["Kurollo"]
-usernames = ["Kurollo"]
-passwords = ["1028"]
+# グラフサイズ
+# 円グラフ
+circle_size = 300
+# 線グラフ
+chart_height = None
+chart_width = None
 
 # SQL
 # 事前の情報を取得
@@ -94,8 +103,8 @@ def circle_graph(dataframe):
             textinfo = 'label+percent'
         )
         fig.update_layout(
-            height=300,
-            width=300,
+            height=circle_size,
+            width=circle_size,
             margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
             showlegend=False,
         modebar_remove=[
@@ -123,8 +132,8 @@ def chart_graph(dataframe):
             )
         )
     fig.update_layout(
-        height=None,
-        width=None,
+        height=chart_height,
+        width=chart_width,
 	autosize=True,
         plot_bgcolor = "#202020",
         xaxis=dict(dtick=5),
@@ -162,8 +171,8 @@ def chart_graph(dataframe):
             )
         )
     fig.update_layout(
-        height=None,
-        width=None,
+        height=chart_height,
+        width=chart_width,
 	autosize=True,
         plot_bgcolor = "#202020",
         xaxis=dict(dtick=5),
@@ -184,51 +193,6 @@ def chart_graph(dataframe):
     fig.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
     col2.plotly_chart(fig, config=dict({'displaylogo': False}))
-
-def chart_graph_point(dataframe):
-    """折れ線グラフを表示
-    """
-    fig = go.Figure()
-    score_value = dataframe[name_list]
-    cumsum_data = score_value.cumsum()
-    for i, tmp_name in enumerate(name_list):
-        fig.add_trace(
-            go.Scatter(
-                x = score_value.index,
-                y = cumsum_data[tmp_name],
-                name = name_dict[name_list[i]],
-                marker = dict(
-                    line=dict(width=3)
-                )
-            )
-        )
-    fig.update_layout(
-        height=None,
-        width=None,
-	autosize=True,
-        plot_bgcolor = "#202020",
-        title=dict(
-            text="対戦記録(ポイント)",
-            font=dict(size=30,color="white")
-        ),
-        xaxis=dict(dtick=5),
-        yaxis=dict(title="ポイント"),
-        modebar_remove=[
-                'toImage',  # 画像ダウンロード
-                'zoom2d',  # ズームモード
-                'pan2d',  # 移動モード
-                'select2d',  # 四角形で選択
-                'lasso2d',  # ラッソで選択
-                'zoomIn2d',  # 拡大
-                'zoomOut2d',  # 縮小
-                'autoScale2d',  # 自動範囲設定
-                'resetScale2d',  # 元の縮尺
-        ]
-    )
-    # グリッドの調整
-    fig.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
-    fig.update_yaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
-    st.plotly_chart(fig, config=dict({'displaylogo': False}))
 
 def display_func(display_dataframe):
         # 順位と総得点を表示
@@ -290,14 +254,14 @@ def login_func():
 ## Main
 ## -------------------------------------------------------------------------------
 st.set_page_config(
-    page_title="友人戦成績管理アプリ",
-    page_icon="mahjang_manager/01_data/icon.png",
+    page_title=app_title,
+    page_icon=icon_image,
     layout="wide"
 )
 
 # Title
-st.title("友人戦成績管理アプリ")
-header_img = Image.open("mahjang_manager/01_data/head.webp")
+st.title(app_title)
+header_img = Image.open(header_image)
 st.image(header_img,use_column_width=True)
 
 # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
