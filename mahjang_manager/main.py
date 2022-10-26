@@ -127,10 +127,6 @@ def chart_graph(dataframe):
         width=None,
 	autosize=True,
         plot_bgcolor = "#202020",
-        title=dict(
-            text="対戦記録(順位)",
-            font=dict(size=30,color="white")
-        ),
         xaxis=dict(dtick=5),
         yaxis=dict(title="順位",dtick=1,autorange='reversed'),
         modebar_remove=[
@@ -170,10 +166,6 @@ def chart_graph(dataframe):
         width=None,
 	autosize=True,
         plot_bgcolor = "#202020",
-        title=dict(
-            text="対戦記録(ポイント)",
-            font=dict(size=30,color="white")
-        ),
         xaxis=dict(dtick=5),
         yaxis=dict(title="ポイント"),
         modebar_remove=[
