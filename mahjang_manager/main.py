@@ -32,7 +32,7 @@ player_3 = "Tamasuke"
 player_4 = "Kurollo"
 
 # DB上の名前の定義
-name_list = ["ayaka","rutiti","tama","kurollo"]
+name_list = ["紅花さん","ルチチ","Tamasuke","Kurollo"]
 
 # DB上の定義の名前と表示名称の辞書
 name_dict = {
@@ -54,18 +54,6 @@ circle_size = 300
 # 線グラフ
 chart_height = None
 chart_width = None
-
-# SQL
-# 事前の情報を取得
-sql_pre_select = "SELECT id, date from MAHJANG_RECORD"
-# データ入力用のクエリ
-spl_insert = "INSERT INTO MAHJANG_RECORD (date,ayaka,rutiti,tama,kurollo) VALUES (?, ?, ?, ?, ?)"
-# データ検索用のクエリ
-sql_select = "SELECT * FROM MAHJANG_RECORD WHERE date >= ? AND date <= ?"
-# データ更新用のクエリ
-update_sql = "UPDATE MAHJANG_RECORD SET ayaka=?, rutiti=?,tama=?,kurollo=? WHERE id=?"
-# データ削除用のクエリ
-delete_sql = "DELETE FROM MAHJANG_RECORD WHERE id=?"
 
 ## Function
 ## -------------------------------------------------------------------------------
@@ -197,9 +185,8 @@ def chart_graph(dataframe):
 
 def display_func(display_dataframe):
         # 順位と総得点を表示
-        ranking_df = pd.DataFrame([display_dataframe.sum()[["ayaka", "rutiti","tama","kurollo"]]]).T
+        ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
         ranking_df.columns = ["総得点"]
-        ranking_df.index = [player_1,player_2,player_3,player_4]
         ranking_df = ranking_df.sort_values("総得点", ascending=False)
         st.markdown("## 総合順位(対局数 {})".format(len(display_dataframe)))
         col1, col2, col3, col4 = st.columns(4)
@@ -274,30 +261,32 @@ st.image(header_img,use_column_width=True)
 
 # Detaに接続
 deta = Deta(st.secrets["deta_key"])
+db = deta.Base("mahjang_manager_db")
 
 # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
-conn = sqlite3.connect(dbname)
-cur = conn.cursor()
-pre_df = pd.read_sql(sql_pre_select, conn).set_index("id")
-raw_start_date = pre_df.min().values[0]
-raw_end_date = pre_df.max().values[0]
-cur.close()
-conn.close()
+data_lsit = []
+for tmp_data in db.fetch().items:
+    data_lsit.append(tmp_data["data"]+[tmp_data["date"]]+[tmp_data["key"]])
+
+df_all_data = pd.DataFrame(data_lsit)
+df_all_data.columns = name_list + ["Date","key"]
+
+# データの最大、最小時間
+raw_min_date = df_all_data["Date"].min()
+raw_max_date = df_all_data["Date"].max()
 
 # Select Mode
 mode = st.selectbox("機能選択",[mode_1,mode_2,mode_3, mode_4])
 try:
     if mode==mode_1: # 1日集計
-        # 日時を元にDBからデータを取得
-        display_dataframe = select2dataframe(raw_start_date, raw_end_date).set_index("id")
         # グラフを表示
-        display_func(display_dataframe)
+        display_func(df_all_data)
 
     elif mode==mode_2: # 全期間集計
-        date_list = pre_df.drop_duplicates()
+        date_list = df_all_data["Date"].drop_duplicates()
         start_data = st.selectbox("日付を選択",date_list,index=len(date_list)-1)
         # 日時を元にDBからデータを取得
-        display_dataframe = select2dataframe(start_data, start_data).set_index("id")
+        display_dataframe = df_all_data[df_all_data["Date"]==start_data][name_list+["Date"]]
         # グラフを表示
         display_func(display_dataframe)
 
