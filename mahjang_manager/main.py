@@ -319,11 +319,11 @@ try:
             selection_data = data["selected_rows"]
             if st.button("更新"):
                 for i in range(len(selection_data)):
-		    update_value = {
-		        "data":[selection_data[i][name_list[0]],selection_data[i][name_list[1]],selection_data[i][name_list[2]],selection_data[i][name_list[3]]],
-			"date":selection_data[i]["Date"],
-			"key":None
-		    }
+                    update_value = {
+                        "data":[selection_data[i][name_list[0]],selection_data[i][name_list[1]],selection_data[i][name_list[2]],selection_data[i][name_list[3]]],
+                        "date":selection_data[i]["Date"],
+                        "key":None
+                    }
                     db.update(update_value, selection_data[i]["key"])
 
                 st.success("情報が更新されました")
@@ -335,3 +335,4 @@ try:
 
 except Exception as e:
     raise
+
