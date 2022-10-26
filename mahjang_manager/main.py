@@ -8,7 +8,7 @@ from PIL import Image
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-#from deta import Deta
+from deta import Deta
 
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
