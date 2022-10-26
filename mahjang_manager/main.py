@@ -104,9 +104,11 @@ def circle_graph(dataframe):
         )
         tmp_columns.plotly_chart(fig, config=dict({'displaylogo': False}))
 
-def chart_graph_rank(dataframe):
+def chart_graph(dataframe):
     """折れ線グラフを表示
     """
+    col1, col2 = st.columns(2)
+    col1.subheader("対戦記録(ポイント)")
     fig = go.Figure()
     rank_df = dataframe[name_list].rank(axis=1, ascending=False).astype("int")
     for i, tmp_name in enumerate(name_list):
@@ -131,6 +133,49 @@ def chart_graph_rank(dataframe):
         ),
         xaxis=dict(dtick=5),
         yaxis=dict(title="順位",dtick=1,autorange='reversed'),
+        modebar_remove=[
+                'toImage',  # 画像ダウンロード
+                'zoom2d',  # ズームモード
+                'pan2d',  # 移動モード
+                'select2d',  # 四角形で選択
+                'lasso2d',  # ラッソで選択
+                'zoomIn2d',  # 拡大
+                'zoomOut2d',  # 縮小
+                'autoScale2d',  # 自動範囲設定
+                'resetScale2d',  # 元の縮尺
+        ]
+    )
+    # グリッドの調整
+    fig.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
+    fig.update_yaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
+    st.plotly_chart(fig, config=dict({'displaylogo': False}))
+
+    col2.subheader("対戦記録(順位)")
+    fig = go.Figure()
+    score_value = dataframe[name_list]
+    cumsum_data = score_value.cumsum()
+    for i, tmp_name in enumerate(name_list):
+        fig.add_trace(
+            go.Scatter(
+                x = score_value.index,
+                y = cumsum_data[tmp_name],
+                name = name_dict[name_list[i]],
+                marker = dict(
+                    line=dict(width=3)
+                )
+            )
+        )
+    fig.update_layout(
+        height=None,
+        width=None,
+	autosize=True,
+        plot_bgcolor = "#202020",
+        title=dict(
+            text="対戦記録(ポイント)",
+            font=dict(size=30,color="white")
+        ),
+        xaxis=dict(dtick=5),
+        yaxis=dict(title="ポイント"),
         modebar_remove=[
                 'toImage',  # 画像ダウンロード
                 'zoom2d',  # ズームモード
@@ -212,9 +257,7 @@ def display_func(display_dataframe):
         circle_graph(display_dataframe)
         st.markdown("---")
         # 折れ線グラフを表示
-        chart_graph_point(display_dataframe)
-        st.markdown("---")
-        chart_graph_rank(display_dataframe)
+        chart_graph(display_dataframe)
         st.markdown("---")
 
 # パスワードのハッシュ化
