@@ -288,13 +288,11 @@ try:
                 sum_values = sum([player_1_value,player_2_value,player_3_value,player_4_value])
                 if st.button("データを登録"):
                     if sum_values==0:
-                        conn = sqlite3.connect(dbname)
-                        cur = conn.cursor()
-                        data = [str(datetime.datetime.now().date()), player_1_value, player_2_value, player_3_value, player_4_value]
-                        cur.execute(spl_insert, data)
-                        conn.commit()
-                        cur.close()
-                        conn.close()
+                        db.put({
+				"data":[player_1_value,player_2_value,player_3_value,player_4_value],
+				"date":str(datetime.datetime.now().date()),
+				"key":None
+			})
                         st.success("データが登録されました")
                     else:
                         st.warning("入力値が不正です")
