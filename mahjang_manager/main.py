@@ -347,7 +347,7 @@ try:
                 st.success("情報が更新されました")
 	
 	    if st.button("削除"):
-                conn = sqlite3.connect(dbname)
+		conn = sqlite3.connect(dbname)
                 cur = conn.cursor()
 		for i in range(len(selection_data)):
                     cur.execute(update_sql, selection_data[i]["rowIndex"]+1)
