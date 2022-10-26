@@ -93,6 +93,7 @@ def chart_graph(dataframe):
     col1.subheader("対戦記録(順位)")
     fig = go.Figure()
     rank_df = dataframe[name_list].rank(axis=1, ascending=False).astype("int")
+    st.write(rank_df)
     for i, tmp_name in enumerate(name_list):
         fig.add_trace(
             go.Scatter(
