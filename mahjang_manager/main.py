@@ -317,6 +317,7 @@ try:
             )
 
             selection_data = data["selected_rows"]
+	    st.write(selection_data)
             if st.button("更新"):
                 for i in range(len(selection_data)):
                     update_value = {
