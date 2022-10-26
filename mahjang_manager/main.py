@@ -345,16 +345,16 @@ try:
                 cur.close()
                 conn.close()
                 st.success("情報が更新されました")
-	    if st.button("削除"):
-		None
-# 		conn = sqlite3.connect(dbname)
-#                 cur = conn.cursor()
-# 		for i in range(len(selection_data)):
-#                     cur.execute(delete_sql, selection_data[i]["rowIndex"]+1)
-#                 conn.commit()
-#                 cur.close()
-#                 conn.close()
-# 		st.success("データが削除されました")
+
+            if st.button("削除"):
+                conn = sqlite3.connect(dbname)
+                cur = conn.cursor()
+                for i in range(len(selection_data)):
+                    cur.execute(delete_sql, selection_data[i]["rowIndex"]+1)
+            conn.commit()
+            cur.close()
+            conn.close()
+            st.success("データが削除されました")
 
 except Exception as e:
     raise
