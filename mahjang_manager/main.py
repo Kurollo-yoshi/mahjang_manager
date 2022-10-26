@@ -108,7 +108,7 @@ def chart_graph(dataframe):
     """折れ線グラフを表示
     """
     col2, col1 = st.columns(2)
-    col1.subheader("対戦記録(ポイント)")
+    col1.subheader("対戦記録(順位)")
     fig = go.Figure()
     rank_df = dataframe[name_list].rank(axis=1, ascending=False).astype("int")
     for i, tmp_name in enumerate(name_list):
@@ -146,7 +146,7 @@ def chart_graph(dataframe):
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
     col1.plotly_chart(fig, config=dict({'displaylogo': False}))
 
-    col2.subheader("対戦記録(順位)")
+    col2.subheader("対戦記録(ポイント)")
     fig = go.Figure()
     score_value = dataframe[name_list]
     cumsum_data = score_value.cumsum()
