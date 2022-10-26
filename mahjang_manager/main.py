@@ -65,6 +65,8 @@ spl_insert = "INSERT INTO MAHJANG_RECORD (date,ayaka,rutiti,tama,kurollo) VALUES
 sql_select = "SELECT * FROM MAHJANG_RECORD WHERE date >= ? AND date <= ?"
 # データ更新用のクエリ
 update_sql = "UPDATE MAHJANG_RECORD SET ayaka=?, rutiti=?,tama=?,kurollo=? WHERE id=?"
+# データ削除用のクエリ
+delete_sql = "DELETE FROM MAHJANG_RECORD WHERE id=?"
 
 ## Function
 ## -------------------------------------------------------------------------------
@@ -343,6 +345,16 @@ try:
                 cur.close()
                 conn.close()
                 st.success("情報が更新されました")
+		
+	    if st.button("削除"):
+                conn = sqlite3.connect(dbname)
+                cur = conn.cursor()
+		for i in range(len(selection_data)):
+                    cur.execute(update_sql, selection_data[i]["rowIndex"]+1)
+                conn.commit()
+                cur.close()
+                conn.close()
+		st.success("データが削除されました")
 
 except Exception as e:
     raise
