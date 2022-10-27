@@ -360,7 +360,7 @@ def sort_match(name_list, data_list):
     sorted_data = np.array(data_list)[arg_index]
     return sorted_data.tolist()
 
-def get_some_data(data_json):
+def reshape_data(data_json):
     """jsonファイルから情報を取得
     """
     try:
