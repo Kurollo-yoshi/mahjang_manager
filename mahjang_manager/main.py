@@ -272,8 +272,6 @@ db = deta.Base("mahjang_manager_db")
 
 df_all_data, raw_min_date, raw_max_date = get_some_data()
 
-st.dataframe(df_all_data)
-
 # Select Mode
 mode = st.selectbox("機能選択",[mode_1,mode_2,mode_3, mode_4])
 try:
