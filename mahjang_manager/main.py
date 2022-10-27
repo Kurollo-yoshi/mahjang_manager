@@ -360,7 +360,7 @@ def sort_match(name_list, data_list):
     sorted_data = np.array(data_list)[arg_index]
     return sorted_data.tolist()
 
-def get_some_data(data_json):
+def reshape_data(data_json):
     """jsonファイルから情報を取得
     """
     try:
@@ -453,7 +453,7 @@ try:
         if login_func():
             load_file = st.file_uploader("ファイルアップロード", type='json')
             jan_data = json.load(load_file)
-            tmp_dict = get_some_data(jan_data)
+            tmp_dict = reshape_data(jan_data)
             if sum_values==0:
                 db.put(tmp_dict)
                 st.success("データが登録されました")
