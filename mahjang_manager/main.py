@@ -290,9 +290,7 @@ try:
 
     elif mode==mode_3: # 入力
         load_file = st.file_uploader("ファイルアップロード", type='json')
-	# jsonファイルを読み込み
-        jan_json = open(load_file, encoding="utf-8")
-        jan_data = json.load(jan_json)
+        jan_data = json.load(load_file)
         st.write(jan_data)
         if login_func():
                 st.markdown("## 順位点を入力")
