@@ -289,8 +289,8 @@ try:
         display_func(display_dataframe)
 
     elif mode==mode_3: # 入力
-	load_file = st.file_uploader("ファイルアップロード", type='json')
-	st.write(load_file)
+        load_file = st.file_uploader("ファイルアップロード", type='json')
+        st.write(load_file)
         if login_func():
                 st.markdown("## 順位点を入力")
                 player_1_value = st.number_input(name_list[0])
