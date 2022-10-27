@@ -253,6 +253,167 @@ def get_some_data():
     return df_all_data, raw_min_date, raw_max_date
 
 
+def pai_num2name(pai_num):
+    pai_str = str(pai_num)
+    reach = False
+    if "r" in pai_str: # リーチ?
+        reach = True
+        pai_num.replace("r","")
+    pai_name = pai_dict[pai_str]
+    return reach, pai_name
+
+def calc_win_num(data_json):
+    """個人和了回数を取得
+    """
+    log_data = data_json["log"]
+    # 初期配列
+    win_count_sum = np.array([0,0,0,0])
+    for tmp_data in log_data:
+        win_data = tmp_data[16]
+        if win_data[0] == "和了": # 和了のときのみ
+            win_num = [1 if i>0 else 0 for i in win_data[1]] # 点数移動→和了回数のリストに変換
+            win_count_sum = win_count_sum + np.array(win_num)
+    return win_count_sum.tolist()
+
+def calc_win_sum(data_json):
+    """和了合計得点を取得
+    """
+    log_data = data_json["log"]
+    # 初期配列
+    win_count_sum = np.array([0,0,0,0])
+    for tmp_data in log_data:
+        win_data = tmp_data[16]
+        if win_data[0] == "和了": # 和了のときのみ
+            win_num = [i if i>0 else 0 for i in win_data[1]] # 点数移動→和了回数のリストに変換
+            win_count_sum = win_count_sum + np.array(win_num)
+    return win_count_sum.tolist()
+
+def calc_meld_num(data_json):
+    """副露回数を取得
+    """
+    master_meld_arr = np.array([0,0,0,0])
+    for game_log in data_json["log"]: # 対局ごと
+        check_meld_arr = np.array([0,0,0,0])
+        for i, player in enumerate([5,8,11,14]): # プレイヤーごと
+            tmp_tumo_data = game_log[player]
+            for tmp_tumo in tmp_tumo_data: # ツモごと
+                if type(tmp_tumo) is str: # ツモに副露がある場合
+                    check_meld_arr[i] = 1
+        master_meld_arr = master_meld_arr + check_meld_arr
+    return master_meld_arr.tolist()
+
+def calc_deal_num(data_json):
+    """個人放銃回数を算出
+    """
+    log_data = data_json["log"]
+    # 初期配列
+    deal_count_sum = np.array([0,0,0,0])
+    for tmp_data in log_data:
+        win_data = tmp_data[16]
+        if len(win_data)!=1: # 九種九牌
+            # 和了のときのみ & ロンは点数変動が二人のとき
+            if (win_data[0] == "和了")&((np.array(win_data[1])==0).sum()==2):
+                deal_num_list = [1 if i<0 else 0 for i in win_data[1]]
+                deal_count_sum = deal_count_sum + deal_num_list
+    return deal_count_sum.tolist()
+
+def calc_deal_sum(data_json):
+    """個人合計放銃点を算出
+    """
+    log_data = data_json["log"]
+    # 初期配列
+    deal_count_sum = np.array([0,0,0,0])
+    for tmp_data in log_data:
+        win_data = tmp_data[16]
+        if len(win_data)!=1: # 九種九牌
+            # 和了のときのみ & ロンは点数変動が二人のとき
+            if (win_data[0] == "和了")&((np.array(win_data[1])==0).sum()==2):
+                deal_num_list = [i if i<0 else 0 for i in win_data[1]]
+                deal_count_sum = deal_count_sum + deal_num_list
+    return deal_count_sum.tolist()
+
+def calc_start_sum(data_json):
+    """配牌シャンテン数の合計を算出
+    """
+    shanten = Shanten()
+    master_shanten_arr = np.array([0,0,0,0])
+    for tmp_log in data_json["log"]:
+        for i, player in enumerate([4,7,10,13]):
+            tmp_tahei = tmp_log[player]
+            pai_str_list = [pai_num2name(i)[1] for i in tmp_tahei]
+            pai_num_list  = ["","","",""]
+            for hai in pai_str_list:
+                for j, kind in enumerate(["m", "p", "s", "z"]):
+                    if kind in hai:
+                        hai_num = hai.replace(kind,"")
+                        pai_num_list[j] = pai_num_list[j] + str(hai_num)
+            # シャンテン数を算出
+            tiles = TilesConverter.string_to_34_array(man=pai_num_list[0], pin=pai_num_list[1], sou=pai_num_list[2],honors=pai_num_list[3])
+            result = shanten.calculate_shanten(tiles)
+            master_shanten_arr[i] = master_shanten_arr[i] + result
+    return master_shanten_arr.tolist()
+
+def sort_match(name_list, data_list):
+    """ データの順番を統一化
+    """
+    arg_index = np.argsort(name_list)
+    sorted_data = np.array(data_list)[arg_index]
+    return sorted_data.tolist()
+
+def get_some_data(data_json):
+    """jsonファイルから情報を取得
+    """
+    try:
+        # 対局者名(席順で東南西北のリスト)
+        player_name = data_json["name"]
+        # 対局日時(YYYY/MM/DD/ HH:mm:ss)
+        date_str = data_json["title"][1]
+        # 対局結果(player_nameの順序で[素点,ポイント, .....]のリスト)
+        result_data = data_json["sc"]
+        result_score = list(itemgetter(0,2,4,6)(result_data))
+        result_point = list(itemgetter(1,3,5,7)(result_data))
+        # 局数
+        game_num = len(data_json["log"])
+        # 個人和了回数
+        win_num = calc_win_num(data_json)
+        # 和了合計得点
+        win_sum = calc_win_sum(data_json)
+        # 個人副露回数
+        meld_num = calc_meld_num(data_json)
+        # 個人放銃回数
+        deal_num = calc_deal_num(data_json)
+        # 個人放銃合計得点
+        deal_sum = calc_deal_sum(data_json)
+        # 配牌シャンテン数合計
+        start_sum = calc_start_sum(data_json)
+
+        # データの並び順を統一させる ['Kurollo', 'Tamasuke', 'ルチチ', '紅花さん']
+        result_score = sort_match(player_name, result_score)
+        result_point = sort_match(player_name, result_point)
+        win_num = sort_match(player_name, win_num)
+        win_sum = sort_match(player_name, win_sum)
+        meld_num = sort_match(player_name, meld_num)
+        deal_num = sort_match(player_name, deal_num)
+        deal_sum = sort_match(player_name, deal_sum)
+        start_sum = sort_match(player_name, start_sum)
+
+        result_dict = {
+            "date"          : date_str,     # 対局日時(YYYY/MM/DD/ HH:mm:ss)
+            "game_num"      : game_num,     # 局数
+            "result_score"  : result_score, # 対局結果(素点) [player1, player2, player3, player4]
+            "result_point"  : result_point, # 対局結果(ポイント) [player1, player2, player3, player4]
+            "win_num"       : win_num,      # 個人和了回数
+            "win_sum"       : win_sum,      # 和了合計得点
+            "meld_num"      : meld_num,     # 個人副露回数(1局の中でないたかどうか)
+            "deal_num"      : deal_num,     # 個人放銃回数
+            "deal_sum"      : deal_sum,     # 個人放銃合計得点
+            "start_sum"     : start_sum,    # 配牌シャンテン数合計
+        }
+        return result_dict
+    except Exception as e:
+        raise
+
+
 ## Main
 ## -------------------------------------------------------------------------------
 st.set_page_config(
@@ -289,26 +450,15 @@ try:
         display_func(display_dataframe)
 
     elif mode==mode_3: # 入力
-        load_file = st.file_uploader("ファイルアップロード", type='json')
-        jan_data = json.load(load_file)
-        st.write(jan_data)
         if login_func():
-                st.markdown("## 順位点を入力")
-                player_1_value = st.number_input(name_list[0])
-                player_2_value = st.number_input(name_list[1])
-                player_3_value = st.number_input(name_list[2])
-                player_4_value = st.number_input(name_list[3])
-                sum_values = sum([player_1_value,player_2_value,player_3_value,player_4_value])
-                if st.button("データを登録"):
-                    if sum_values==0:
-                        db.put({
-				"data":[player_1_value,player_2_value,player_3_value,player_4_value],
-				"date":str(datetime.datetime.now().date()),
-				"key":None
-			})
-                        st.success("データが登録されました")
-                    else:
-                        st.warning("入力値が不正です")
+            load_file = st.file_uploader("ファイルアップロード", type='json')
+            jan_data = json.load(load_file)
+            tmp_dict = get_some_data(jan_data)
+            if sum_values==0:
+                db.put(tmp_dict)
+                st.success("データが登録されました")
+            else:
+                st.warning("入力値が不正です")
 
     elif mode==mode_4: # 入力済みの対局データを取得
         if login_func():
@@ -317,7 +467,7 @@ try:
             gb.configure_selection(selection_mode="multiple", use_checkbox=True)
             gb.configure_pagination()
             gridOptions = gb.build()
-            st.write("データを編集する際は変更後にチェックをいれること")	
+            st.write("データを編集する際は変更後にチェックをいれること")
             data = AgGrid(
                 df_all_data,
                 gridOptions=gridOptions,
@@ -329,15 +479,6 @@ try:
             )
 
             selection_data = data["selected_rows"]
-            if st.button("更新"):
-                for i in range(len(selection_data)):
-                    update_value = {
-                        "result_point":[selection_data[i][name_list[0]],selection_data[i][name_list[1]],selection_data[i][name_list[2]],selection_data[i][name_list[3]]],
-                        "date":selection_data[i]["Date"]
-                    }
-                    db.update(update_value, selection_data[i]["key"])
-
-                st.success("情報が更新されました")
 
             if st.button("削除"):
                 for i in range(len(selection_data)):
@@ -346,3 +487,4 @@ try:
 
 except Exception as e:
     raise
+
