@@ -423,6 +423,28 @@ st.set_page_config(
     layout="wide"
 )
 
+# pai_dictの生成(pickleで読み込んだほうがいい)
+# 麻雀牌と数字の対応辞書を作成
+pai_dict = {}
+man_list = [str(i)+"m" for i in range(1,10)]
+pin_list = [str(i)+"p" for i in range(1,10)]
+sou_list = [str(i)+"s" for i in range(1,10)]
+zih_list = [str(i)+"z" for i in range(1,8)]
+# マンズ
+for i, tmp_hai in enumerate(man_list): # マンズ
+    pai_dict = {**pai_dict, **{str(i+11):tmp_hai}}
+for i, tmp_hai in enumerate(pin_list): # ピンズ
+    pai_dict = {**pai_dict, **{str(i+21):tmp_hai}}
+for i, tmp_hai in enumerate(sou_list): # ソウズ
+    pai_dict = {**pai_dict, **{str(i+31):tmp_hai}}
+for i, tmp_hai in enumerate(zih_list): # 字牌
+    pai_dict = {**pai_dict, **{str(i+41):tmp_hai}}
+for i, tmp_hai in enumerate(["5m","5p","5s"]): # 赤牌
+    pai_dict = {**pai_dict, **{str(i+51):tmp_hai}}
+#
+pai_dict = {**pai_dict, **{str(60):None}}
+
+
 # Title
 st.title(app_title)
 header_img = Image.open(header_image)
