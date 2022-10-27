@@ -32,13 +32,13 @@ icon_image = "mahjang_manager/01_data/icon.png"
 app_title = "友人戦成績管理アプリ"
 
 # プレイヤー名
-player_1 = "紅花さん"
-player_2 = "ルチチ"
-player_3 = "Tamasuke"
-player_4 = "Kurollo"
+player_1 = "Kurollo"
+player_2 = "Tamasuke""ルチチ"
+player_3 = "ルチチ"
+player_4 = "紅花さん"
 
 # DB上の名前の定義
-name_list = ["紅花さん","ルチチ","Tamasuke","Kurollo"]
+name_list = ['Kurollo', 'Tamasuke', 'ルチチ', '紅花さん']
 
 # アプリ機能
 mode_1 = "全期間集計"
@@ -240,7 +240,7 @@ def get_some_data():
     # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
     data_lsit = []
     for tmp_data in db.fetch().items:
-        data_lsit.append(tmp_data["data"]+[tmp_data["date"]]+[tmp_data["key"]])
+        data_lsit.append(tmp_data["result_point"]+[tmp_data["date"]]+[tmp_data["key"]])
 
     df_all_data = pd.DataFrame(data_lsit)
     df_all_data.columns = name_list + ["Date","key"]
@@ -326,7 +326,7 @@ try:
             if st.button("更新"):
                 for i in range(len(selection_data)):
                     update_value = {
-                        "data":[selection_data[i][name_list[0]],selection_data[i][name_list[1]],selection_data[i][name_list[2]],selection_data[i][name_list[3]]],
+                        "result_point":[selection_data[i][name_list[0]],selection_data[i][name_list[1]],selection_data[i][name_list[2]],selection_data[i][name_list[3]]],
                         "date":selection_data[i]["Date"]
                     }
                     db.update(update_value, selection_data[i]["key"])
