@@ -454,7 +454,7 @@ try:
             load_file = st.file_uploader("ファイルアップロード", type='json')
             if load_file:
                 jan_data = json.load(load_file)
-                tmp_dict = get_some_data(jan_data)
+                tmp_dict = reshape_data(jan_data)
                 if sum_values==0:
                     db.put(tmp_dict)
                     st.success("データが登録されました")
