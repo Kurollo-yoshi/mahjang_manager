@@ -452,13 +452,14 @@ try:
     elif mode==mode_3: # 入力
         if login_func():
             load_file = st.file_uploader("ファイルアップロード", type='json')
-            jan_data = json.load(load_file)
-            tmp_dict = get_some_data(jan_data)
-            if sum_values==0:
-                db.put(tmp_dict)
-                st.success("データが登録されました")
-            else:
-                st.warning("入力値が不正です")
+            if load_file:
+                jan_data = json.load(load_file)
+                tmp_dict = get_some_data(jan_data)
+                if sum_values==0:
+                    db.put(tmp_dict)
+                    st.success("データが登録されました")
+                else:
+                    st.warning("入力値が不正です")
 
     elif mode==mode_4: # 入力済みの対局データを取得
         if login_func():
