@@ -278,10 +278,11 @@ try:
         display_func(df_all_data)
 
     elif mode==mode_2: # 全期間集計
-        date_list = df_all_data["Date"].drop_duplicates()
+	df_date = pd.to_datetime(df_all_data["Date"]).map(lambda x: str(x.date()))
+        date_list = df_date.drop_duplicates()
         start_data = st.selectbox("日付を選択",date_list,index=len(date_list)-1)
         # 日時を元にDBからデータを取得
-        display_dataframe = df_all_data[df_all_data["Date"]==start_data][name_list+["Date"]]
+        display_dataframe = df_all_data[df_date==start_data][name_list+["Date"]]
         # グラフを表示
         display_func(display_dataframe)
 
