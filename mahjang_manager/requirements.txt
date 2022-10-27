@@ -3,4 +3,5 @@ streamlit==1.5.0
 streamlit-aggrid==0.3.2
 Pillow==9.0.1
 plotly==5.10.0
+mahjong==1.2.0
 deta
