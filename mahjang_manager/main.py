@@ -278,7 +278,7 @@ try:
         display_func(df_all_data)
 
     elif mode==mode_2: # 全期間集計
-        df_date = pd.to_datetime(df_all_data["Date"]).map(lambda x: str(x.date()))
+        df_date = pd.to_datetime(df_all_data["Date"]).dt.strftime("%Y-%m")
         date_list = df_date.drop_duplicates()
         start_data = st.selectbox("日付を選択",date_list,index=len(date_list)-1)
         # 日時を元にDBからデータを取得
