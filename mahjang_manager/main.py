@@ -290,7 +290,10 @@ try:
 
     elif mode==mode_3: # 入力
         load_file = st.file_uploader("ファイルアップロード", type='json')
-        st.write(load_file)
+	# jsonファイルを読み込み
+        jan_json = open(json_file_name, encoding="utf-8")
+        jan_data = json.load(jan_json)
+        st.write(jan_data)
         if login_func():
                 st.markdown("## 順位点を入力")
                 player_1_value = st.number_input(name_list[0])
