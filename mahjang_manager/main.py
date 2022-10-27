@@ -1,8 +1,10 @@
 ## 月一友人戦成績管理
 ## -------------------------------------------------------------------------------
+import json
 import sqlite3
 import datetime
 import hashlib
+from operator import itemgetter
 from PIL import Image
 
 import pandas as pd
@@ -11,6 +13,10 @@ import plotly.graph_objects as go
 from deta import Deta
 
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
+
+from mahjong.shanten import Shanten
+#麻雀牌
+from mahjong.tile import TilesConverter
 
 ## Config
 ## -------------------------------------------------------------------------------
