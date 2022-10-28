@@ -218,7 +218,9 @@ def display_deteil(detail_dataframe):
     """詳細結果の表示 & グラフ表示
     """
     sum_dataframe = create_detail(detail_dataframe)
-    
+    sum_dataframe["data"] = sum_dataframe.index
+    sum_dataframe = sum_dataframe[["data"] + name_list]
+
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
     gb.configure_selection(selection_mode="multiple", use_checkbox=True)
     gridOptions = gb.build()
