@@ -185,7 +185,37 @@ def chart_graph(dataframe):
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
     col2.plotly_chart(fig, config=dict({'displaylogo': False}))
 
-def display_func(display_dataframe):
+def create_detail(dataframe):
+    """詳細データのdataframeを作成
+    """
+    # 和了率
+    win_num_data = dataframe[['Kurollo_和了回数', 'Tamasuke_和了回数', 'ルチチ_和了回数', '紅花さん_和了回数']]
+    win_rate = (win_num_data.sum()*100/dataframe["局数"].sum()).round().values
+    # 副露率
+    meld_num_data = dataframe[['Kurollo_副露回数', 'Tamasuke_副露回数', 'ルチチ_副露回数', '紅花さん_副露回数']]
+    meld_rate = (meld_num_data.sum()*100/dataframe["局数"].sum()).round().values
+    # 平均配牌シャンテン数
+    start_num_data = dataframe[['Kurollo_配牌', 'Tamasuke_配牌', 'ルチチ_配牌', '紅花さん_配牌']]
+    start_num = (start_num_data.sum()/dataframe["局数"].sum()).round(2).values
+    # 平均打点
+    win_score_data = dataframe[['Kurollo_和了合計', 'Tamasuke_和了合計', 'ルチチ_和了合計', '紅花さん_和了合計']]
+    win_score = (win_score_data.sum().values/win_num_data.sum().values).round()
+    # 放銃率
+    deal_num_data = dataframe[['Kurollo_放銃回数', 'Tamasuke_放銃回数', 'ルチチ_放銃回数', '紅花さん_放銃回数']]
+    deal_rate = (deal_num_data.sum()*100/dataframe["局数"].sum()).round().values
+    # 平均放銃
+    deal_score_data = dataframe[['Kurollo_放銃合計', 'Tamasuke_放銃合計', 'ルチチ_放銃合計', '紅花さん_放銃合計']]
+    dael_score = (deal_score_data.sum().values/deal_num_data.sum().values).round()
+    detail = pd.DataFrame(
+                            [win_rate, meld_rate, win_score, deal_rate, dael_score, start_num],
+                            index=["和了率","副露率","平均打点","放銃率","平均放銃","配牌シャンテン数"],
+                            columns=name_list
+                        )
+    detail = detail.loc[["和了率","放銃率","平均打点","平均放銃","副露率","配牌シャンテン数"]]
+    return detail
+
+
+def display_func(display_dataframe,detail_dataframe):
     # 順位と総得点を表示
     ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
     ranking_df.columns = ["総得点"]
@@ -205,6 +235,8 @@ def display_func(display_dataframe):
     # 折れ線グラフを表示
     chart_graph(display_dataframe)
     st.markdown("---")
+    # 詳細データを表示
+    st.dataframe(create_detail(detail_dataframe))
 
 # パスワードのハッシュ化
 def make_hashes(password):
@@ -477,7 +509,7 @@ mode = st.selectbox("機能選択",[mode_1,mode_2,mode_3, mode_4])
 try:
     if mode==mode_1: # 1日集計
         # グラフを表示
-        display_func(df_all_data)
+        display_func(df_all_data, df_detail)
 
     elif mode==mode_2: # 全期間集計
         df_date = pd.to_datetime(df_all_data["Date"]).dt.strftime("%Y-%m")
@@ -486,7 +518,7 @@ try:
         # 日時を元にDBからデータを取得
         display_dataframe = df_all_data[df_date==start_data][name_list+["Date"]]
         # グラフを表示
-        display_func(display_dataframe)
+        display_func(display_dataframe, df_detail)
 
     elif mode==mode_3: # 入力
         if login_func():
