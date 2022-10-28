@@ -237,10 +237,12 @@ def display_deteil(detail_dataframe):
     )
     if len(data["selected_rows"])>0:
         sel_data = data["selected_rows"][0]
-        fig_cat = go.Figure(data=[
+        fig = go.Figure()
+        fig.add_trace(
             go.Bar(name=sel_data["data"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
-        ])
-        st.plotly_chart(fig_cat)
+        )
+        fig.update_layout(title=sel_data["data"])
+        st.plotly_chart(fig)
 
 def display_func(display_dataframe,detail_dataframe, all=True):
     # 順位と総得点を表示
