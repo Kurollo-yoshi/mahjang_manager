@@ -236,7 +236,7 @@ def display_func(display_dataframe,detail_dataframe):
     chart_graph(display_dataframe)
     st.markdown("---")
     # 詳細データを表示
-    st.dataframe(create_detail(detail_dataframe).style.background_gradient(axis=0).set_precision(0))
+    st.dataframe(create_detail(detail_dataframe).style.background_gradient(axis=1).set_precision(0))
 
 # パスワードのハッシュ化
 def make_hashes(password):
