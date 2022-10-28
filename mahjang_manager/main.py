@@ -214,6 +214,23 @@ def create_detail(dataframe):
     detail = detail.loc[["和了率","放銃率","平均打点","平均放銃","副露率","配牌シャンテン数"]]
     return detail
 
+def display_deteil(detail_dataframe):
+    """詳細結果の表示 & グラフ表示
+    """
+    sum_dataframe = create_detail(detail_dataframe)
+    
+    gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
+    gb.configure_selection(selection_mode="multiple", use_checkbox=True)
+    gridOptions = gb.build()
+    data = AgGrid(
+        sum_dataframe,
+        gridOptions=gridOptions,
+        enable_enterprise_modules=True,
+        allow_unsafe_jscode=True,
+        update_mode=GridUpdateMode.SELECTION_CHANGED,
+        theme="dark",
+        data_return_mode=DataReturnMode.AS_INPUT
+    )
 
 def display_func(display_dataframe,detail_dataframe):
     # 順位と総得点を表示
@@ -236,7 +253,7 @@ def display_func(display_dataframe,detail_dataframe):
     chart_graph(display_dataframe)
     st.markdown("---")
     # 詳細データを表示
-    st.dataframe(create_detail(detail_dataframe).style.background_gradient(axis=1).set_precision(0))
+    display_deteil(detail_dataframe)
 
 # パスワードのハッシュ化
 def make_hashes(password):
@@ -471,8 +488,6 @@ st.set_page_config(
     layout="wide"
 )
 
-pd.options.display.precision = 0
-
 # pai_dictの生成(pickleで読み込んだほうがいい)
 # 麻雀牌と数字の対応辞書を作成
 pai_dict = {}
@@ -537,7 +552,6 @@ try:
 
     elif mode==mode_4: # 入力済みの対局データを取得
         if login_func():
-            # 日時を元にDBからデータを取得
             gb = GridOptionsBuilder.from_dataframe(df_all_data, editable=True)
             gb.configure_selection(selection_mode="multiple", use_checkbox=True)
             gb.configure_pagination()
