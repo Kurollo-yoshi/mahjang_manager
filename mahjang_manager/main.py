@@ -222,9 +222,8 @@ def display_deteil(detail_dataframe):
     sum_dataframe = sum_dataframe[["data"] + name_list]
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
-    gb.configure_selection(selection_mode="multiple", use_checkbox=True)
     gridOptions = gb.build()
-    data = AgGrid(
+    AgGrid(
         sum_dataframe,
         gridOptions=gridOptions,
         enable_enterprise_modules=True,
