@@ -1,6 +1,7 @@
 ## 月一友人戦成績管理
 ## -------------------------------------------------------------------------------
 import json
+from re import A
 import sqlite3
 import datetime
 import hashlib
@@ -234,7 +235,6 @@ def display_deteil(detail_dataframe):
         theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT
     )
-    st.write(data["selected_rows"])
     if len(data["selected_rows"])>0:
         sel_data = data["selected_rows"][0]
         fig_cat = go.Figure(data=[
@@ -486,7 +486,7 @@ def reshape_data(data_json):
             "deal_sum"      : deal_sum,     # 個人放銃合計得点
             "start_sum"     : start_sum,    # 配牌シャンテン数合計
         }
-        return result_dict
+        return result_dict, player_name
     except Exception as e:
         raise
 
@@ -553,9 +553,10 @@ try:
             load_file = st.file_uploader("ファイルアップロード", type='json')
             if load_file:
                 jan_data = json.load(load_file)
-                tmp_dict = reshape_data(jan_data)
+                tmp_dict, player_name = reshape_data(jan_data)
                 if st.button("アップロード"):
                     try:
+                        assert name_list==sorted(player_name)
                         db.put(tmp_dict)
                         st.success("データが登録されました")
                     except:
