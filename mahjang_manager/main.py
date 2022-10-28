@@ -513,7 +513,7 @@ def reshape_data(data_json):
 st.set_page_config(
     page_title=app_title,
     page_icon=icon_image,
-    layout="centered"
+    layout="wide"
 )
 
 # pai_dictの生成(pickleで読み込んだほうがいい)
