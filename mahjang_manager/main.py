@@ -255,15 +255,16 @@ def login_func():
 def get_some_data(db):
     # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
     data_lsit = []
+    detail_list = []
     for tmp_data in db.fetch().items:
         data_lsit.append(tmp_data["result_point"]+[tmp_data["date"]]+[tmp_data["key"]])
-	detail_list.append(tmp_data["deal_num"]+tmp_data["deal_sum"]+[tmp_data["game_num"]]+tmp_data["meld_num"]+tmp_data["start_sum"]+tmp_data["win_num"]+tmp_data["win_sum"])
+        detail_list.append(tmp_data["deal_num"]+tmp_data["deal_sum"]+[tmp_data["game_num"]]+tmp_data["meld_num"]+tmp_data["start_sum"]+tmp_data["win_num"]+tmp_data["win_sum"])
 
     df_all_data = pd.DataFrame(data_lsit)
     df_all_data.columns = name_list + ["Date","key"]
     df_all_data["Date"] = pd.to_datetime(df_all_data["Date"])
     df_all_data = df_all_data.sort_values("Date",ascending=True)
-	
+
     df_detail = pd.DataFrame(detail_list)
     df_detail.columns = detail_columns
 
