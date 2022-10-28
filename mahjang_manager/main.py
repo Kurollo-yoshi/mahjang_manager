@@ -471,6 +471,8 @@ st.set_page_config(
     layout="wide"
 )
 
+pd.options.display.precision = 0
+
 # pai_dictの生成(pickleで読み込んだほうがいい)
 # 麻雀牌と数字の対応辞書を作成
 pai_dict = {}
