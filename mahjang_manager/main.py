@@ -235,7 +235,7 @@ def display_deteil(detail_dataframe):
         theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT,
         height=800,
-        fit_columns_on_grid_load=False
+        fit_columns_on_grid_load=True
     )
     if len(data["selected_rows"])>0:
         sel_data = data["selected_rows"][0]
