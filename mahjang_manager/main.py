@@ -235,11 +235,11 @@ def display_deteil(detail_dataframe):
         data_return_mode=DataReturnMode.AS_INPUT
     )
     st.write(data["selected_rows"])
-    sel_data = data["selected_rows"][0]
-    fig_cat = go.Figure(data=[
-        go.Bar(name=sel_data["data"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
-    ])
-    st.plotly_chart(fig_cat)
+    if len(data["selected_rows"])>0:
+        fig_cat = go.Figure(data=[
+            go.Bar(name=sel_data["data"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
+        ])
+        st.plotly_chart(fig_cat)
 
 def display_func(display_dataframe,detail_dataframe, all=True):
     # 順位と総得点を表示
