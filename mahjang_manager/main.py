@@ -54,8 +54,20 @@ circle_size = 300
 chart_height = 450
 chart_width = 900
 
+# 詳細データのカラム
+detail_columns = [
+    'Kurollo_放銃回数', 'Tamasuke_放銃回数', 'ルチチ_放銃回数', '紅花さん_放銃回数',
+    'Kurollo_放銃合計', 'Tamasuke_放銃合計', 'ルチチ_放銃合計', '紅花さん_放銃合計',
+    '局数',
+    'Kurollo_副露回数', 'Tamasuke_副露回数', 'ルチチ_副露回数', '紅花さん_副露回数',
+    'Kurollo_配牌', 'Tamasuke_配牌', 'ルチチ_配牌', '紅花さん_配牌',
+    'Kurollo_和了回数', 'Tamasuke_和了回数', 'ルチチ_和了回数', '紅花さん_和了回数',
+    'Kurollo_和了合計', 'Tamasuke_和了合計', 'ルチチ_和了合計', '紅花さん_和了合計'
+]
+
 ## Function
 ## -------------------------------------------------------------------------------
+@st.cache
 def circle_graph(dataframe):
     """順位率の円グラフを作成
     """
@@ -93,6 +105,7 @@ def circle_graph(dataframe):
         )
         tmp_columns.plotly_chart(fig, config=dict({'displaylogo': False}))
 
+@st.cache
 def chart_graph(dataframe):
     """折れ線グラフを表示
     """
@@ -174,6 +187,7 @@ def chart_graph(dataframe):
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
     col2.plotly_chart(fig, config=dict({'displaylogo': False}))
 
+@st.cache
 def display_func(display_dataframe):
         # 順位と総得点を表示
         ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
@@ -237,21 +251,26 @@ def login_func():
             st.session_state.login = False
             return st.session_state.login
 
-def get_some_data():
+@st.cache
+def get_some_data(db):
     # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
     data_lsit = []
     for tmp_data in db.fetch().items:
         data_lsit.append(tmp_data["result_point"]+[tmp_data["date"]]+[tmp_data["key"]])
+	detail_list.append(tmp_data["deal_num"]+tmp_data["deal_sum"]+[tmp_data["game_num"]]+tmp_data["meld_num"]+tmp_data["start_sum"]+tmp_data["win_num"]+tmp_data["win_sum"])
 
     df_all_data = pd.DataFrame(data_lsit)
     df_all_data.columns = name_list + ["Date","key"]
     df_all_data["Date"] = pd.to_datetime(df_all_data["Date"])
     df_all_data = df_all_data.sort_values("Date",ascending=True)
+	
+    df_detail = pd.DataFrame(detail_list)
+    df_detail.columns = detail_columns
 
     # データの最大、最小時間
     raw_min_date = df_all_data["Date"].min()
     raw_max_date = df_all_data["Date"].max()
-    return df_all_data, raw_min_date, raw_max_date
+    return df_all_data, df_detail, raw_min_date, raw_max_date
 
 
 def pai_num2name(pai_num):
@@ -454,7 +473,7 @@ st.image(header_img,use_column_width=True)
 deta = Deta(st.secrets["deta_key"])
 db = deta.Base("mahjang_manager_db")
 
-df_all_data, raw_min_date, raw_max_date = get_some_data()
+df_all_data, df_detail, raw_min_date, raw_max_date = get_some_data(db)
 
 # Select Mode
 mode = st.selectbox("機能選択",[mode_1,mode_2,mode_3, mode_4])
