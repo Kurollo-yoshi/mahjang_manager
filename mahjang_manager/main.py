@@ -241,7 +241,7 @@ def display_deteil(detail_dataframe):
         fig.add_trace(
             go.Bar(name=sel_data["data"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
         )
-        fig.update_layout(title=sel_data["data"])
+        st.markdown("## {}".format(sel_data["data"]))
         st.plotly_chart(fig)
 
 def display_func(display_dataframe,detail_dataframe, all=True):
