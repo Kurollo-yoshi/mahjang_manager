@@ -105,6 +105,7 @@ def circle_graph(dataframe):
         )
         tmp_columns.plotly_chart(fig, config=dict({'displaylogo': False}))
 
+@st.cache
 def chart_graph(dataframe):
     """折れ線グラフを表示
     """
@@ -187,25 +188,25 @@ def chart_graph(dataframe):
     col2.plotly_chart(fig, config=dict({'displaylogo': False}))
 
 def display_func(display_dataframe):
-        # 順位と総得点を表示
-        ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
-        ranking_df.columns = ["総得点"]
-        ranking_df = ranking_df.sort_values("総得点", ascending=False)
-        st.markdown("## 総合順位(対局数 {})".format(len(display_dataframe)))
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("1st",ranking_df.index[0],round(ranking_df.iloc[0].values[0],3))
-        col2.metric("2nd",ranking_df.index[1],round(ranking_df.iloc[1].values[0],3))
-        col3.metric("3rd",ranking_df.index[2],round(ranking_df.iloc[2].values[0],3))
-        col4.metric("4th",ranking_df.index[3],round(ranking_df.iloc[3].values[0],3))
-        st.markdown("---")
+    # 順位と総得点を表示
+    ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
+    ranking_df.columns = ["総得点"]
+    ranking_df = ranking_df.sort_values("総得点", ascending=False)
+    st.markdown("## 総合順位(対局数 {})".format(len(display_dataframe)))
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("1st",ranking_df.index[0],round(ranking_df.iloc[0].values[0],3))
+    col2.metric("2nd",ranking_df.index[1],round(ranking_df.iloc[1].values[0],3))
+    col3.metric("3rd",ranking_df.index[2],round(ranking_df.iloc[2].values[0],3))
+    col4.metric("4th",ranking_df.index[3],round(ranking_df.iloc[3].values[0],3))
+    st.markdown("---")
 
-        # 円グラフを表示
-        st.markdown("## 順位分布")
-        circle_graph(display_dataframe)
-        st.markdown("---")
-        # 折れ線グラフを表示
-        chart_graph(display_dataframe)
-        st.markdown("---")
+    # 円グラフを表示
+    st.markdown("## 順位分布")
+    circle_graph(display_dataframe)
+    st.markdown("---")
+    # 折れ線グラフを表示
+    chart_graph(display_dataframe)
+    st.markdown("---")
 
 # パスワードのハッシュ化
 def make_hashes(password):
