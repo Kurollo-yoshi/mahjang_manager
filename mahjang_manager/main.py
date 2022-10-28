@@ -207,11 +207,11 @@ def create_detail(dataframe):
     deal_score_data = dataframe[['Kurollo_放銃合計', 'Tamasuke_放銃合計', 'ルチチ_放銃合計', '紅花さん_放銃合計']]
     dael_score = (deal_score_data.sum().values/deal_num_data.sum().values).round()
     detail = pd.DataFrame(
-                            [win_rate, meld_rate, win_score, deal_rate, dael_score, start_num],
-                            index=["和了率","副露率","平均打点","放銃率","平均放銃","配牌シャンテン数"],
-                            columns=name_list
-                        )
-    detail = detail.loc[["和了率","放銃率","平均打点","平均放銃","副露率","配牌シャンテン数"]]
+                        [win_rate, meld_rate, win_score, deal_rate, dael_score, start_num],
+                        index=["和了率(%)","副露率(%)","平均打点","放銃率(%)","平均放銃","配牌シャンテン数"],
+                        columns=name_list
+                    )
+    detail = detail.loc[["和了率(%)","副露率(%)","平均打点","放銃率(%)","平均放銃","配牌シャンテン数"]]
     return detail
 
 def display_deteil(detail_dataframe):
@@ -555,8 +555,6 @@ try:
     elif mode==mode_4: # 入力済みの対局データを取得
         if login_func():
             gb = GridOptionsBuilder.from_dataframe(df_all_data, editable=True)
-            gb.configure_selection(selection_mode="multiple", use_checkbox=True)
-            gb.configure_pagination()
             gridOptions = gb.build()
             st.write("データを編集する際は変更後にチェックをいれること")
             data = AgGrid(
