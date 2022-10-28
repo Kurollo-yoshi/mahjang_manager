@@ -251,7 +251,6 @@ def login_func():
             st.session_state.login = False
             return st.session_state.login
 
-@st.cache
 def get_some_data(db):
     # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
     data_lsit = []
