@@ -105,7 +105,6 @@ def circle_graph(dataframe):
         )
         tmp_columns.plotly_chart(fig, config=dict({'displaylogo': False}))
 
-@st.cache
 def chart_graph(dataframe):
     """折れ線グラフを表示
     """
@@ -187,7 +186,6 @@ def chart_graph(dataframe):
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
     col2.plotly_chart(fig, config=dict({'displaylogo': False}))
 
-@st.cache
 def display_func(display_dataframe):
         # 順位と総得点を表示
         ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
