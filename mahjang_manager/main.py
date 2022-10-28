@@ -209,10 +209,10 @@ def create_detail(dataframe):
     dael_score = (deal_score_data.sum().abs().values/deal_num_data.sum().values).round()
     detail = pd.DataFrame(
                         [win_rate, meld_rate, win_score, deal_rate, dael_score, start_num],
-                        index=["和了率(%)","副露率(%)","平均打点","放銃率(%)","平均放銃","配牌シャンテン数"],
+                        index=["和了率(%)","副露率(%)","平均打点","放銃率(%)","平均放銃","配牌向聴"],
                         columns=name_list
                     )
-    detail = detail.loc[["和了率(%)","副露率(%)","平均打点","放銃率(%)","平均放銃","配牌シャンテン数"]]
+    detail = detail.loc[["和了率(%)","副露率(%)","平均打点","放銃率(%)","平均放銃","配牌向聴"]]
     return detail
 
 def display_deteil(detail_dataframe):
@@ -220,7 +220,7 @@ def display_deteil(detail_dataframe):
     """
     sum_dataframe = create_detail(detail_dataframe)
     sum_dataframe["data"] = sum_dataframe.index
-    sum_dataframe = sum_dataframe[["data"] + name_list]
+    sum_dataframe = sum_dataframe[["データ項目"] + name_list]
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
     gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=1)
@@ -241,10 +241,10 @@ def display_deteil(detail_dataframe):
         sel_data = data["selected_rows"][0]
         fig = go.Figure()
         fig.add_trace(
-            go.Bar(name=sel_data["data"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
+            go.Bar(name=sel_data["データ項目"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
         )
         fig.update_layout(
-            yaxis=dict(title=sel_data["data"]),
+            yaxis=dict(title=sel_data["データ項目"]),
             modebar_remove=[
                     'toImage',  # 画像ダウンロード
                     'zoom2d',  # ズームモード
