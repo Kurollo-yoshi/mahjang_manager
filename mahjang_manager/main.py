@@ -241,7 +241,20 @@ def display_deteil(detail_dataframe):
         fig.add_trace(
             go.Bar(name=sel_data["data"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
         )
-        st.markdown("## {}".format(sel_data["data"]))
+        fig.update_layout(
+            yaxis=dict(title=sel_data["data"]),
+            modebar_remove=[
+                    'toImage',  # 画像ダウンロード
+                    'zoom2d',  # ズームモード
+                    'pan2d',  # 移動モード
+                    'select2d',  # 四角形で選択
+                    'lasso2d',  # ラッソで選択
+                    'zoomIn2d',  # 拡大
+                    'zoomOut2d',  # 縮小
+                    'autoScale2d',  # 自動範囲設定
+                    'resetScale2d',  # 元の縮尺
+            ]
+        )
         st.plotly_chart(fig)
 
 def display_func(display_dataframe,detail_dataframe, all=True):
