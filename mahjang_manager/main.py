@@ -233,7 +233,7 @@ def display_deteil(detail_dataframe):
         data_return_mode=DataReturnMode.AS_INPUT
     )
 
-def display_func(display_dataframe,detail_dataframe):
+def display_func(display_dataframe,detail_dataframe, all=True):
     # 順位と総得点を表示
     ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
     ranking_df.columns = ["総得点"]
@@ -253,8 +253,9 @@ def display_func(display_dataframe,detail_dataframe):
     # 折れ線グラフを表示
     chart_graph(display_dataframe)
     st.markdown("---")
-    # 詳細データを表示
-    display_deteil(detail_dataframe)
+    if all:
+        # 詳細データを表示
+        display_deteil(detail_dataframe)
 
 # パスワードのハッシュ化
 def make_hashes(password):
@@ -536,7 +537,7 @@ try:
         # 日時を元にDBからデータを取得
         display_dataframe = df_all_data[df_date==start_data][name_list+["Date"]]
         # グラフを表示
-        display_func(display_dataframe, df_detail)
+        display_func(display_dataframe, df_detail, False)
 
     elif mode==mode_3: # 入力
         if login_func():
