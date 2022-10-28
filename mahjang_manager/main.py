@@ -233,7 +233,9 @@ def display_deteil(detail_dataframe):
         allow_unsafe_jscode=True,
         update_mode=GridUpdateMode.SELECTION_CHANGED,
         theme="dark",
-        data_return_mode=DataReturnMode.AS_INPUT
+        data_return_mode=DataReturnMode.AS_INPUT,
+        height=800,
+        fit_columns_on_grid_load=False
     )
     if len(data["selected_rows"])>0:
         sel_data = data["selected_rows"][0]
