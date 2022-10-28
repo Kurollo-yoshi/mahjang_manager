@@ -67,7 +67,6 @@ detail_columns = [
 
 ## Function
 ## -------------------------------------------------------------------------------
-@st.cache
 def circle_graph(dataframe):
     """順位率の円グラフを作成
     """
@@ -105,7 +104,6 @@ def circle_graph(dataframe):
         )
         tmp_columns.plotly_chart(fig, config=dict({'displaylogo': False}))
 
-@st.cache
 def chart_graph(dataframe):
     """折れ線グラフを表示
     """
