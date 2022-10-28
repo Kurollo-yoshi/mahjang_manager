@@ -225,7 +225,6 @@ def display_deteil(detail_dataframe):
     gb.configure_selection(selection_mode="multiple", use_checkbox=True)
     gb.configure_pagination()
     gridOptions = gb.build()
-    gridOptions = gb.build()
     data = AgGrid(
         sum_dataframe,
         gridOptions=gridOptions,
