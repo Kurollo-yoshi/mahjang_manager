@@ -234,12 +234,9 @@ def display_deteil(detail_dataframe):
         theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT
     )
-    selection_data = data["selected_rows"][0]
+    sel_data = data["selected_rows"][0]
     fig_cat = go.Figure(data=[
-        go.Bar(name="Kurollo", x=0, y=selection_data["Kurollo"]),
-        go.Bar(name="Tamasuke", x=1, y=selection_data["Tamasuke"]),
-        go.Bar(name="ルチチ", x=2, y=selection_data["ルチチ"]),
-        go.Bar(name="紅花さん", x=3, y=selection_data["紅花さん"]),
+        go.Bar(name=sel_data["data"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
     ])
     st.plotly_chart(fig_cat)
 
