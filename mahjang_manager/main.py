@@ -205,7 +205,7 @@ def create_detail(dataframe):
     deal_rate = (deal_num_data.sum()*100/dataframe["局数"].sum()).round().values
     # 平均放銃
     deal_score_data = dataframe[['Kurollo_放銃合計', 'Tamasuke_放銃合計', 'ルチチ_放銃合計', '紅花さん_放銃合計']]
-    dael_score = (deal_score_data.sum().values/deal_num_data.sum().values).round()
+    dael_score = (deal_score_data.sum().abs().values/deal_num_data.sum().values).round()
     detail = pd.DataFrame(
                         [win_rate, meld_rate, win_score, deal_rate, dael_score, start_num],
                         index=["和了率(%)","副露率(%)","平均打点","放銃率(%)","平均放銃","配牌シャンテン数"],
