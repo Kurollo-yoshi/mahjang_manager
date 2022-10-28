@@ -222,8 +222,11 @@ def display_deteil(detail_dataframe):
     sum_dataframe = sum_dataframe[["data"] + name_list]
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
+    gb.configure_selection(selection_mode="multiple", use_checkbox=True)
+    gb.configure_pagination()
     gridOptions = gb.build()
-    AgGrid(
+    gridOptions = gb.build()
+    data = AgGrid(
         sum_dataframe,
         gridOptions=gridOptions,
         enable_enterprise_modules=True,
@@ -232,6 +235,9 @@ def display_deteil(detail_dataframe):
         theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT
     )
+    selection_data = data["selected_rows"]
+    st.write(selection_data)
+    
 
 def display_func(display_dataframe,detail_dataframe, all=True):
     # 順位と総得点を表示
@@ -555,6 +561,8 @@ try:
     elif mode==mode_4: # 入力済みの対局データを取得
         if login_func():
             gb = GridOptionsBuilder.from_dataframe(df_all_data, editable=True)
+            gb.configure_selection(selection_mode="multiple", use_checkbox=True)
+            gb.configure_pagination()
             gridOptions = gb.build()
             st.write("データを編集する際は変更後にチェックをいれること")
             data = AgGrid(
