@@ -219,7 +219,7 @@ def display_deteil(detail_dataframe):
     """詳細結果の表示 & グラフ表示
     """
     sum_dataframe = create_detail(detail_dataframe)
-    sum_dataframe["data"] = sum_dataframe.index
+    sum_dataframe["データ項目"] = sum_dataframe.index
     sum_dataframe = sum_dataframe[["データ項目"] + name_list]
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
