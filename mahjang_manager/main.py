@@ -555,7 +555,7 @@ try:
                 jan_data = json.load(load_file)
                 if st.button("アップロード"):
                     try:
-			tmp_dict, player_name = reshape_data(jan_data)
+                        tmp_dict, player_name = reshape_data(jan_data)
                         assert name_list==sorted(player_name)
                         db.put(tmp_dict)
                         st.success("データが登録されました")
