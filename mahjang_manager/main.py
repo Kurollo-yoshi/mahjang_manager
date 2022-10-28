@@ -222,7 +222,7 @@ def display_deteil(detail_dataframe):
     sum_dataframe = sum_dataframe[["data"] + name_list]
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
-    gb.configure_selection(selection_mode="single", use_checkbox=True, pre_selected_rows=0)
+    gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=0)
     gb.configure_pagination()
     gridOptions = gb.build()
     data = AgGrid(
@@ -234,9 +234,14 @@ def display_deteil(detail_dataframe):
         theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT
     )
-    selection_data = data["selected_rows"]
-    st.write(selection_data)
-    
+    selection_data = data["selected_rows"][0]
+    fig_cat = go.Figure(data=[
+        go.Bar(name="Kurollo", x=0, y=selection_data["Kurollo"]),
+        go.Bar(name="Tamasuke", x=1, y=selection_data["Tamasuke"]),
+        go.Bar(name="ルチチ", x=2, y=selection_data["ルチチ"]),
+        go.Bar(name="紅花さん", x=3, y=selection_data["紅花さん"]),
+    ])
+    st.plotly_chart(fig_cat)
 
 def display_func(display_dataframe,detail_dataframe, all=True):
     # 順位と総得点を表示
