@@ -26,7 +26,7 @@ from mahjong.tile import TilesConverter
 # DB
 dbname = "mahjang_manager/01_data/mahjang.db"
 # ヘッダー画像
-header_image = "mahjang_manager/01_data/head.webp"
+header_image = "mahjang_manager/01_data/header.jpg"
 # アイコン画像
 icon_image = "mahjang_manager/01_data/icon.png"
 
