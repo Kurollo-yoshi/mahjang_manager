@@ -44,7 +44,7 @@ name_list = ['Kurollo', 'Tamasuke', 'ルチチ', '紅花さん']
 
 # アプリ機能
 mode_1 = "全期間集計"
-mode_2 = "一日集計"
+mode_2 = "単月集計"
 mode_3 = "入力"
 mode_4 = "管理"
 
