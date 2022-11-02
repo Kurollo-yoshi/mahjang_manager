@@ -232,6 +232,7 @@ def display_deteil(detail_dataframe):
                 y0=limit_dict[sel_data["データ項目"]][0],
                 y1=limit_dict[sel_data["データ項目"]][1],
                 fillcolor = "green",
+                opacity=0.5,
                 line=dict(width=0,color=None),
                 layer="above"
         )
