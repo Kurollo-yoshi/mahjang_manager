@@ -227,7 +227,7 @@ def display_deteil(detail_dataframe):
         fig.add_trace(
             go.Bar(name=sel_data["データ項目"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
         )
-	fig.add_hrect(
+        fig.add_hrect(
 		dict(
 			y0=limit_dict[sel_data["データ項目"]][0],
 			y1=limit_dict[sel_data["データ項目"]][1],
@@ -251,7 +251,7 @@ def display_deteil(detail_dataframe):
             ]
         )
         st.plotly_chart(fig)
-	
+
 def display_func(display_dataframe,detail_dataframe, all=True):
     # 順位と総得点を表示
     ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
