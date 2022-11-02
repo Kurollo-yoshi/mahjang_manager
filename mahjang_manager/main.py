@@ -615,8 +615,8 @@ try:
                         assert name_list==sorted(player_name)
                         db.put(tmp_dict)
                         st.success("データが登録されました")
-			send_line_notify("データが登録されました")
-			send_line_notify(tmp_dict)
+                        send_line_notify("データが登録されました")
+                        send_line_notify(tmp_dict)
                     except:
                         st.warning("入力値が不正です")
 
@@ -640,12 +640,11 @@ try:
             selection_data = data["selected_rows"]
 
             if st.button("削除"):
-		send_line_notify("データが削除されました")
+                send_line_notify("データが削除されました")
                 for i in range(len(selection_data)):
                     db.delete(selection_data[i]["key"])
-		send_line_notify(selection_data[i])
+                    send_line_notify(selection_data[i])
                 st.success("データが削除されました")
-		send_line_notify(tmp_dict)
 
 except Exception as e:
     raise
