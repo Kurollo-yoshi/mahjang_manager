@@ -490,6 +490,18 @@ def reshape_data(data_json):
     except Exception as e:
         raise
 
+# 通知
+# ------------------------------------------------------------------------------------------------------------
+def send_line_notify(notification_message):
+    """
+    LINEに通知する
+    """
+    line_notify_token = 'A4aDm0dKREXD9ydI3n6lSCmweLqnilW5qJYCMD1Zctf'
+    line_notify_api = 'https://notify-api.line.me/api/notify'
+    headers = {'Authorization': f'Bearer {line_notify_token}'}
+    data = {'message': notification_message}
+    requests.post(line_notify_api, headers = headers, data = data)
+
 # 認証
 # ------------------------------------------------------------------------------------------------------------
 # パスワードのハッシュ化
@@ -541,6 +553,7 @@ st.set_page_config(
     page_icon=icon_image,
     layout="wide"
 )
+send_line_notify("システムが起動しました")
 
 # pai_dictの生成(pickleで読み込んだほうがいい)
 # 麻雀牌と数字の対応辞書を作成
@@ -602,6 +615,8 @@ try:
                         assert name_list==sorted(player_name)
                         db.put(tmp_dict)
                         st.success("データが登録されました")
+			send_line_notify("データが登録されました")
+			send_line_notify(tmp_dict)
                     except:
                         st.warning("入力値が不正です")
 
@@ -625,9 +640,12 @@ try:
             selection_data = data["selected_rows"]
 
             if st.button("削除"):
+		send_line_notify("データが削除されました")
                 for i in range(len(selection_data)):
                     db.delete(selection_data[i]["key"])
+		send_line_notify(selection_data[i])
                 st.success("データが削除されました")
+		send_line_notify(tmp_dict)
 
 except Exception as e:
     raise
