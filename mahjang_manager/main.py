@@ -228,13 +228,11 @@ def display_deteil(detail_dataframe):
             go.Bar(name=sel_data["データ項目"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
         )
         fig.add_hrect(
-		dict(
-			y0=limit_dict[sel_data["データ項目"]][0],
-			y1=limit_dict[sel_data["データ項目"]][1],
-			fillcolor = "green",
-			line=dict(width=0,color=None),
-			layer="below"
-		)
+		y0=limit_dict[sel_data["データ項目"]][0],
+		y1=limit_dict[sel_data["データ項目"]][1],
+		fillcolor = "green",
+		line=dict(width=0,color=None),
+		layer="below"
 	)
         fig.update_layout(
             yaxis=dict(title=sel_data["データ項目"]),
