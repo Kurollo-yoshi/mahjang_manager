@@ -227,28 +227,28 @@ def display_deteil(detail_dataframe):
         fig.add_trace(
             go.Bar(name=sel_data["データ項目"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
         )
-	if sel_data["データ項目"]:
-		fig.add_hrect(
-			y0=limit_dict[sel_data["データ項目"]][0],
-			y1=limit_dict[sel_data["データ項目"]][1],
-			fillcolor = "green",
-			line=dict(width=0,color=None),
-			layer="below"
-		)
+        if sel_data["データ項目"]:
+            fig.add_hrect(
+                y0=limit_dict[sel_data["データ項目"]][0],
+                y1=limit_dict[sel_data["データ項目"]][1],
+                fillcolor = "green",
+                line=dict(width=0,color=None),
+                layer="below"
+            )
         fig.update_layout(
-            yaxis=dict(title=sel_data["データ項目"]),
-            modebar_remove=[
-                    'toImage',  # 画像ダウンロード
-                    'zoom2d',  # ズームモード
-                    'pan2d',  # 移動モード
-                    'select2d',  # 四角形で選択
-                    'lasso2d',  # ラッソで選択
-                    'zoomIn2d',  # 拡大
-                    'zoomOut2d',  # 縮小
-                    'autoScale2d',  # 自動範囲設定
-                    'resetScale2d',  # 元の縮尺
-            ]
-        )
+                yaxis=dict(title=sel_data["データ項目"]),
+                modebar_remove=[
+                        'toImage',  # 画像ダウンロード
+                        'zoom2d',  # ズームモード
+                        'pan2d',  # 移動モード
+                        'select2d',  # 四角形で選択
+                        'lasso2d',  # ラッソで選択
+                        'zoomIn2d',  # 拡大
+                        'zoomOut2d',  # 縮小
+                        'autoScale2d',  # 自動範囲設定
+                        'resetScale2d',  # 元の縮尺
+                ]
+            )
         st.plotly_chart(fig)
 
 def display_func(display_dataframe,detail_dataframe, all=True):
