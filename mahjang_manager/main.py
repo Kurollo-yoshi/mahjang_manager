@@ -497,11 +497,16 @@ def send_line_notify(notification_message):
     """
     LINEに通知する
     """
+    if "send" not in st.session_state:
+        st.session_state.send = False
+    if st.session_state.login:
+        return True
     line_notify_token = 'A4aDm0dKREXD9ydI3n6lSCmweLqnilW5qJYCMD1Zctf'
     line_notify_api = 'https://notify-api.line.me/api/notify'
     headers = {'Authorization': f'Bearer {line_notify_token}'}
     data = {'message': f'message: {notification_message}'}
     requests.post(line_notify_api, headers = headers, data = data)
+    st.session_state.login = True
 
 # 認証
 # ------------------------------------------------------------------------------------------------------------
