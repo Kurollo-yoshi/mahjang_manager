@@ -499,7 +499,7 @@ def send_line_notify(notification_message):
     line_notify_token = 'A4aDm0dKREXD9ydI3n6lSCmweLqnilW5qJYCMD1Zctf'
     line_notify_api = 'https://notify-api.line.me/api/notify'
     headers = {'Authorization': f'Bearer {line_notify_token}'}
-    data = {'message': notification_message}
+    data = {'message': f'message: {notification_message}'}
     requests.post(line_notify_api, headers = headers, data = data)
 
 # 認証
