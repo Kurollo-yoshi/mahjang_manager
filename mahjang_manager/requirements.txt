@@ -5,4 +5,5 @@ Pillow==9.0.1
 plotly==5.10.0
 mahjong==1.2.0
 matplotlib==3.5.3
+requests
 deta
