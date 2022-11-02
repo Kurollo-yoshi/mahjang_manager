@@ -1,5 +1,5 @@
 ## 月一友人戦成績管理
-## -------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------
 import json
 from re import A
 import sqlite3
@@ -21,7 +21,7 @@ from mahjong.shanten import Shanten
 from mahjong.tile import TilesConverter
 
 ## Config
-## -------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------
 # ファイルパス
 # DB
 dbname = "mahjang_manager/01_data/mahjang.db"
@@ -66,8 +66,21 @@ detail_columns = [
     'Kurollo_和了合計', 'Tamasuke_和了合計', 'ルチチ_和了合計', '紅花さん_和了合計'
 ]
 
+# 各詳細の目安データ
+limit_dict = {
+	"和了率(%)":[22,23],
+	"副露率(%)":[20,40],
+	"平均打点":[5000,6000],
+	"放銃率(%)":[11,12],
+	"平均放銃":None,
+	"配牌向聴":None
+}
+
 ## Function
-## -------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------
+
+# 表示関係
+# ------------------------------------------------------------------------------------------------------------
 def circle_graph(dataframe):
     """順位率の円グラフを作成
     """
@@ -186,6 +199,85 @@ def chart_graph(dataframe):
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', gridcolor='gray')
     col2.plotly_chart(fig, config=dict({'displaylogo': False}))
 
+def display_deteil(detail_dataframe):
+    """詳細結果の表示 & グラフ表示
+    """
+    sum_dataframe = create_detail(detail_dataframe)
+    sum_dataframe["データ項目"] = sum_dataframe.index
+    sum_dataframe = sum_dataframe[["データ項目"] + name_list]
+
+    gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
+    gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=1)
+    gb.configure_default_column(min_column_width=20)
+    gridOptions = gb.build()
+    data = AgGrid(
+        sum_dataframe,
+        gridOptions=gridOptions,
+        enable_enterprise_modules=True,
+        allow_unsafe_jscode=True,
+        update_mode=GridUpdateMode.SELECTION_CHANGED,
+        theme="dark",
+        data_return_mode=DataReturnMode.AS_INPUT,
+        height=250
+        # fit_columns_on_grid_load=True
+    )
+    if len(data["selected_rows"])>0:
+        sel_data = data["selected_rows"][0]
+        fig = go.Figure()
+        fig.add_trace(
+            go.Bar(name=sel_data["データ項目"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
+        )
+	fig.add_hrect(
+		dict(
+			y0=limit_dict[sel_data["データ項目"]][0],
+			y1=limit_dict[sel_data["データ項目"]][1],
+			fillcolor = "green",
+			line=dict(width=0,color=None),
+			layer="below"
+		)
+	)
+        fig.update_layout(
+            yaxis=dict(title=sel_data["データ項目"]),
+            modebar_remove=[
+                    'toImage',  # 画像ダウンロード
+                    'zoom2d',  # ズームモード
+                    'pan2d',  # 移動モード
+                    'select2d',  # 四角形で選択
+                    'lasso2d',  # ラッソで選択
+                    'zoomIn2d',  # 拡大
+                    'zoomOut2d',  # 縮小
+                    'autoScale2d',  # 自動範囲設定
+                    'resetScale2d',  # 元の縮尺
+            ]
+        )
+        st.plotly_chart(fig)
+	
+def display_func(display_dataframe,detail_dataframe, all=True):
+    # 順位と総得点を表示
+    ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
+    ranking_df.columns = ["総得点"]
+    ranking_df = ranking_df.sort_values("総得点", ascending=False)
+    st.markdown("## 総合順位(対局数 {})".format(len(display_dataframe)))
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("1st",ranking_df.index[0],round(ranking_df.iloc[0].values[0],3))
+    col2.metric("2nd",ranking_df.index[1],round(ranking_df.iloc[1].values[0],3))
+    col3.metric("3rd",ranking_df.index[2],round(ranking_df.iloc[2].values[0],3))
+    col4.metric("4th",ranking_df.index[3],round(ranking_df.iloc[3].values[0],3))
+    st.markdown("---")
+
+    # 円グラフを表示
+    st.markdown("## 順位分布")
+    circle_graph(display_dataframe)
+    st.markdown("---")
+    # 折れ線グラフを表示
+    chart_graph(display_dataframe)
+    st.markdown("---")
+    if all:
+        # 詳細データを表示
+        display_deteil(detail_dataframe)
+
+# データ操作
+# ------------------------------------------------------------------------------------------------------------
 def create_detail(dataframe):
     """詳細データのdataframeを作成
     """
@@ -215,116 +307,6 @@ def create_detail(dataframe):
     detail = detail.loc[["和了率(%)","副露率(%)","平均打点","放銃率(%)","平均放銃","配牌向聴"]]
     return detail
 
-def display_deteil(detail_dataframe):
-    """詳細結果の表示 & グラフ表示
-    """
-    sum_dataframe = create_detail(detail_dataframe)
-    sum_dataframe["データ項目"] = sum_dataframe.index
-    sum_dataframe = sum_dataframe[["データ項目"] + name_list]
-
-    gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
-    gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=1)
-    gb.configure_default_column(min_column_width=20)
-    gridOptions = gb.build()
-    data = AgGrid(
-        sum_dataframe,
-        gridOptions=gridOptions,
-        enable_enterprise_modules=True,
-        allow_unsafe_jscode=True,
-        update_mode=GridUpdateMode.SELECTION_CHANGED,
-        theme="dark",
-        data_return_mode=DataReturnMode.AS_INPUT,
-        height=250
-        # fit_columns_on_grid_load=True
-    )
-    if len(data["selected_rows"])>0:
-        sel_data = data["selected_rows"][0]
-        fig = go.Figure()
-        fig.add_trace(
-            go.Bar(name=sel_data["データ項目"], x=name_list, y=[sel_data["Kurollo"],sel_data["Tamasuke"],sel_data["ルチチ"],sel_data["紅花さん"]])
-        )
-        fig.update_layout(
-            yaxis=dict(title=sel_data["データ項目"]),
-            modebar_remove=[
-                    'toImage',  # 画像ダウンロード
-                    'zoom2d',  # ズームモード
-                    'pan2d',  # 移動モード
-                    'select2d',  # 四角形で選択
-                    'lasso2d',  # ラッソで選択
-                    'zoomIn2d',  # 拡大
-                    'zoomOut2d',  # 縮小
-                    'autoScale2d',  # 自動範囲設定
-                    'resetScale2d',  # 元の縮尺
-            ]
-        )
-        st.plotly_chart(fig)
-
-def display_func(display_dataframe,detail_dataframe, all=True):
-    # 順位と総得点を表示
-    ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
-    ranking_df.columns = ["総得点"]
-    ranking_df = ranking_df.sort_values("総得点", ascending=False)
-    st.markdown("## 総合順位(対局数 {})".format(len(display_dataframe)))
-    col1, col2, col3, col4 = st.columns(4)
-    col1.metric("1st",ranking_df.index[0],round(ranking_df.iloc[0].values[0],3))
-    col2.metric("2nd",ranking_df.index[1],round(ranking_df.iloc[1].values[0],3))
-    col3.metric("3rd",ranking_df.index[2],round(ranking_df.iloc[2].values[0],3))
-    col4.metric("4th",ranking_df.index[3],round(ranking_df.iloc[3].values[0],3))
-    st.markdown("---")
-
-    # 円グラフを表示
-    st.markdown("## 順位分布")
-    circle_graph(display_dataframe)
-    st.markdown("---")
-    # 折れ線グラフを表示
-    chart_graph(display_dataframe)
-    st.markdown("---")
-    if all:
-        # 詳細データを表示
-        display_deteil(detail_dataframe)
-
-# パスワードのハッシュ化
-def make_hashes(password):
-	return hashlib.sha256(str.encode(password)).hexdigest()
-
-# パスワードの確認
-def check_hashes(password,hashed_text):
-	if make_hashes(password) == hashed_text:
-		return hashed_text
-	return False
-
-# ログイン
-def login_user(username,password):
-    conn = sqlite3.connect(dbname)
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM USERTABLE WHERE username =? AND password = ?',(username,password))
-    data = cur.fetchall()
-    cur.close()
-    conn.close()
-    return data
-
-def login_func():
-    """ログイン機能
-    """
-    if "login" not in st.session_state:
-        st.session_state.login = False
-    username = st.text_input("ユーザー名を入力してください")
-    password = st.text_input("パスワードを入力してください", type="password")
-
-    if st.session_state.login:
-        return True
-    if st.button("ログイン"):
-        hashed_pswd = make_hashes(password)
-        result = login_user(username,check_hashes(password,hashed_pswd))
-        if result:
-            st.success("ログインしました")
-            st.session_state.login = True
-            return st.session_state.login
-        else:
-            st.success("ユーザー名かパスワードが間違っています")
-            st.session_state.login = False
-            return st.session_state.login
-
 def get_some_data(db):
     # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
     data_lsit = []
@@ -346,8 +328,9 @@ def get_some_data(db):
     raw_max_date = df_all_data["Date"].max()
     return df_all_data, df_detail, raw_min_date, raw_max_date
 
-
 def pai_num2name(pai_num):
+    """牌番号を牌名に変換
+    """
     pai_str = str(pai_num)
     reach = False
     if "r" in pai_str: # リーチ?
@@ -507,6 +490,49 @@ def reshape_data(data_json):
     except Exception as e:
         raise
 
+# 認証
+# ------------------------------------------------------------------------------------------------------------
+# パスワードのハッシュ化
+def make_hashes(password):
+	return hashlib.sha256(str.encode(password)).hexdigest()
+
+# パスワードの確認
+def check_hashes(password,hashed_text):
+	if make_hashes(password) == hashed_text:
+		return hashed_text
+	return False
+
+# ログイン
+def login_user(username,password):
+    conn = sqlite3.connect(dbname)
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM USERTABLE WHERE username =? AND password = ?',(username,password))
+    data = cur.fetchall()
+    cur.close()
+    conn.close()
+    return data
+
+def login_func():
+    """ログイン機能
+    """
+    if "login" not in st.session_state:
+        st.session_state.login = False
+    username = st.text_input("ユーザー名を入力してください")
+    password = st.text_input("パスワードを入力してください", type="password")
+
+    if st.session_state.login:
+        return True
+    if st.button("ログイン"):
+        hashed_pswd = make_hashes(password)
+        result = login_user(username,check_hashes(password,hashed_pswd))
+        if result:
+            st.success("ログインしました")
+            st.session_state.login = True
+            return st.session_state.login
+        else:
+            st.success("ユーザー名かパスワードが間違っています")
+            st.session_state.login = False
+            return st.session_state.login
 
 ## Main
 ## -------------------------------------------------------------------------------
