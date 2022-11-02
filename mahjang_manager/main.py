@@ -233,7 +233,7 @@ def display_deteil(detail_dataframe):
                 y1=limit_dict[sel_data["データ項目"]][1],
                 fillcolor = "green",
                 line=dict(width=0,color=None),
-                layer="below"
+                layer="above"
         )
         fig.update_layout(
                 yaxis=dict(title=sel_data["データ項目"]),
