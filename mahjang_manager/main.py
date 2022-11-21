@@ -223,7 +223,7 @@ def display_deteil(detail_dataframe):
     sum_dataframe["データ項目"] = sum_dataframe.index
     sum_dataframe = sum_dataframe[["データ項目"] + name_list]
 
-    gb = GridOptionsBuilder.from_dataframe(sum_dataframe, min_column_width=10)
+    gb = GridOptionsBuilder.from_dataframe(sum_dataframe, min_column_width=15)
     gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=[0])
     gridOptions = gb.build()
     data = AgGrid(
