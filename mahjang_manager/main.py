@@ -225,10 +225,10 @@ def display_deteil(detail_dataframe):
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
     gb.configure_column("データ項目",header_name="データ項目",width=5)
-#     gb.configure_column("Kurollo",header_name="Kurollo",min_column_width=2)
-#     gb.configure_column("Tamasuke",header_name="Tamasuke",min_column_width=2)
-#     gb.configure_column("ルチチ",header_name="ルチチ",min_column_width=2)
-#     gb.configure_column("紅花さん",header_name="紅花さん",min_column_width=2)
+    gb.configure_column("Kurollo",header_name="Kurollo",width=2)
+    gb.configure_column("Tamasuke",header_name="Tamasuke",width=2)
+    gb.configure_column("ルチチ",header_name="ルチチ",width=2)
+    gb.configure_column("紅花さん",header_name="紅花さん",width=2)
     gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=[0])
     gridOptions = gb.build()
     data = AgGrid(
@@ -239,7 +239,7 @@ def display_deteil(detail_dataframe):
         update_mode=GridUpdateMode.SELECTION_CHANGED,
         theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT,
-        height=250
+        height= 250
         # fit_columns_on_grid_load=True
     )
     if len(data["selected_rows"])>0:
