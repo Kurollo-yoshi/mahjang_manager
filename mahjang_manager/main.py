@@ -209,7 +209,7 @@ def display_deteil(detail_dataframe):
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
     gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=1)
-
+    gb.configure_default_column(min_column_width=10)
     gridOptions = gb.build()
     data = AgGrid(
         sum_dataframe,
