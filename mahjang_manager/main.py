@@ -142,8 +142,8 @@ def chart_graph(dataframe):
         width=chart_width,
 	autosize=True,
 	legend=dict(
-	      x=0.1,          # ①：X座標
-	      y=0.9,          # ①：Y座標
+	      x=0,          # ①：X座標
+	      y=1.5,          # ①：Y座標
 	      xanchor='left',  # ②：X座標が凡例のどの部分を表すか
 	      yanchor='top',   # ②：Y座標が凡例のどの部分を表すか
 	      orientation='h', # ③：凡例を横並びにする
