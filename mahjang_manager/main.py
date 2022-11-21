@@ -204,12 +204,12 @@ def display_deteil(detail_dataframe):
     """詳細結果の表示 & グラフ表示
     """
     sum_dataframe = create_detail(detail_dataframe)
-    sum_dataframe["データ項目"] = sum_dataframe.index
-    sum_dataframe = sum_dataframe[["データ項目"] + name_list]
+    sum_dataframe["項目"] = sum_dataframe.index
+    sum_dataframe = sum_dataframe[["項目"] + name_list]
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
     gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=1)
-    gb.configure_default_column(min_column_width=20)
+    gb.configure_default_column(min_column_width=10)
     gridOptions = gb.build()
     data = AgGrid(
         sum_dataframe,
@@ -220,7 +220,7 @@ def display_deteil(detail_dataframe):
         theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT,
         height=250
-        # fit_columns_on_grid_load=True
+        fit_columns_on_grid_load=True
     )
     if len(data["selected_rows"])>0:
         sel_data = data["selected_rows"][0]
