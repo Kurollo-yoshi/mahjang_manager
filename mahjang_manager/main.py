@@ -209,7 +209,7 @@ def display_deteil(detail_dataframe):
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
     gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=[0])
-    gb.configure_default_column(min_column_width=20)
+    #gb.configure_default_column(min_column_width=20)
     gridOptions = gb.build()
     data = AgGrid(
         sum_dataframe,
@@ -219,8 +219,8 @@ def display_deteil(detail_dataframe):
         update_mode=GridUpdateMode.SELECTION_CHANGED,
         theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT,
-        height=250,
-        fit_columns_on_grid_load=True
+        height=250
+        #fit_columns_on_grid_load=True
     )
     if len(data["selected_rows"])>0:
         sel_data = data["selected_rows"][0]
