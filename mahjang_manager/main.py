@@ -111,7 +111,7 @@ def circle_graph(dataframe):
         fig.update_layout(
             height=circle_size,
             width=circle_size,
-            margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
+            margin={'l': -0.1, 'r': -0.1, 't': 0, 'b': 0},
             showlegend=False,
         modebar_remove=[
                 'toImage' # 画像ダウンロード
