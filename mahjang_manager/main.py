@@ -256,7 +256,7 @@ def display_deteil(detail_dataframe):
                         'resetScale2d',  # 元の縮尺
                 ]
             )
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, config=dict({'displaylogo': False}))
 
 def display_func(display_dataframe,detail_dataframe, all=True):
     # 順位と総得点を表示
