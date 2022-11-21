@@ -111,7 +111,7 @@ def circle_graph(dataframe):
         fig.update_layout(
             height=circle_size,
             width=circle_size,
-            margin={'l': -0.1, 'r': -0.1, 't': 0, 'b': 0},
+            margin={'l': 0 'r': 0, 't': 0, 'b': 0},
             showlegend=False,
         modebar_remove=[
                 'toImage' # 画像ダウンロード
@@ -142,8 +142,8 @@ def chart_graph(dataframe):
         width=chart_width,
 	autosize=True,
 	legend=dict(
-	      x=0.01,          # ①：X座標
-	      y=0.99,          # ①：Y座標
+	      x=0.1,          # ①：X座標
+	      y=0.9,          # ①：Y座標
 	      xanchor='left',  # ②：X座標が凡例のどの部分を表すか
 	      yanchor='top',   # ②：Y座標が凡例のどの部分を表すか
 	      orientation='h', # ③：凡例を横並びにする
