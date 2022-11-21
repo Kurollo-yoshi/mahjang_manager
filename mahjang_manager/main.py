@@ -36,7 +36,7 @@ app_title = "友人戦成績管理アプリ"
 
 # プレイヤー名
 player_1 = "Kurollo"
-player_2 = "Tamasuke""ルチチ"
+player_2 = "Tamasuke"
 player_3 = "ルチチ"
 player_4 = "紅花さん"
 
