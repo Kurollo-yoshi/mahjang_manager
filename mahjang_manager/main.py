@@ -54,7 +54,7 @@ mode_4 = "管理"
 circle_size = 300
 # 線グラフ
 chart_height = 300
-chart_width = 450
+chart_width = 400
 
 # 詳細データのカラム
 detail_columns = [
@@ -243,6 +243,8 @@ def display_deteil(detail_dataframe):
                 layer="above"
         )
         fig.update_layout(
+                height=chart_height,
+                width=chart_width,
                 yaxis=dict(title=sel_data["データ項目"]),
                 modebar_remove=[
                         'toImage',  # 画像ダウンロード
