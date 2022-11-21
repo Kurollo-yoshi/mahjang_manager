@@ -240,7 +240,7 @@ def display_deteil(detail_dataframe):
         theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT,
         height= 250,
-	width = 300
+	width = 500
         # fit_columns_on_grid_load=True
     )
     if len(data["selected_rows"])>0:
