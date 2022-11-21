@@ -53,8 +53,8 @@ mode_4 = "管理"
 # 円グラフ
 circle_size = 300
 # 線グラフ
-chart_height = 450
-chart_width = 900
+chart_height = 300
+chart_width = 450
 
 # 詳細データのカラム
 detail_columns = [
@@ -138,8 +138,8 @@ def chart_graph(dataframe):
             )
         )
     fig.update_layout(
-#         height=chart_height,
-#         width=chart_width,
+        height=chart_height,
+        width=chart_width,
 	autosize=True,
         plot_bgcolor = "#202020",
         xaxis=dict(dtick=5),
@@ -177,8 +177,8 @@ def chart_graph(dataframe):
             )
         )
     fig.update_layout(
-#         height=chart_height,
-#         width=chart_width,
+        height=chart_height,
+        width=chart_width,
 	autosize=True,
         plot_bgcolor = "#202020",
         xaxis=dict(dtick=5),
