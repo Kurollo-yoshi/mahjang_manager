@@ -177,8 +177,8 @@ def chart_graph(dataframe):
             )
         )
     fig.update_layout(
-        height=chart_height,
-        width=chart_width,
+#         height=chart_height,
+#         width=chart_width,
 	autosize=True,
         plot_bgcolor = "#202020",
         xaxis=dict(dtick=5),
