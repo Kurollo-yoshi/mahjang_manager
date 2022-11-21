@@ -193,7 +193,7 @@ def chart_graph(dataframe):
 	      xanchor='left',  # ②：X座標が凡例のどの部分を表すか
 	      yanchor='top',   # ②：Y座標が凡例のどの部分を表すか
 	      orientation='h', # ③：凡例を横並びにする
-	      font=dict(size=5)
+	      font=dict(size=7)
 	),
         plot_bgcolor = "#202020",
         xaxis=dict(dtick=5),
