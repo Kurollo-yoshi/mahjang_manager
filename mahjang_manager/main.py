@@ -141,13 +141,13 @@ def chart_graph(dataframe):
         height=chart_height,
         width=chart_width,
 	autosize=True,
-	legend==dict(
-		      x=0.01,          # ①：X座標
-		      y=0.99,          # ①：Y座標
-		      xanchor='left',  # ②：X座標が凡例のどの部分を表すか
-		      yanchor='top',   # ②：Y座標が凡例のどの部分を表すか
-		      orientation='h', # ③：凡例を横並びにする
-		      ),
+	legend=dict(
+	      x=0.01,          # ①：X座標
+	      y=0.99,          # ①：Y座標
+	      xanchor='left',  # ②：X座標が凡例のどの部分を表すか
+	      yanchor='top',   # ②：Y座標が凡例のどの部分を表すか
+	      orientation='h', # ③：凡例を横並びにする
+	),
         plot_bgcolor = "#202020",
         xaxis=dict(dtick=5),
         yaxis=dict(title="順位",dtick=1,autorange='reversed'),
