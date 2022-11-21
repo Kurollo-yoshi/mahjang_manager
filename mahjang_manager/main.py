@@ -209,7 +209,6 @@ def display_deteil(detail_dataframe):
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
     gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=1)
-    gb.configure_column(field="項目",min_column_width=40)
     gb.configure_column(field="Kurollo",min_column_width=5)
     gb.configure_column(field="Tamasuke",min_column_width=5)
     gb.configure_column(field="ルチチ",min_column_width=5)
