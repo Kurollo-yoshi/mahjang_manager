@@ -46,8 +46,9 @@ name_list = ['Kurollo', 'Tamasuke', 'ルチチ', '紅花さん']
 # アプリ機能
 mode_1 = "全期間集計"
 mode_2 = "単月集計"
-mode_3 = "入力"
-mode_4 = "管理"
+mode_3 = "シーズン集計"
+mode_4 = "入力"
+mode_5 = "管理"
 
 # グラフサイズ
 # 円グラフ
@@ -620,11 +621,11 @@ df_all_data, df_detail, raw_min_date, raw_max_date = get_some_data(db)
 # Select Mode
 mode = st.selectbox("機能選択",[mode_1,mode_2,mode_3, mode_4])
 try:
-    if mode==mode_1: # 1日集計
+    if mode==mode_1: # 全期間集計
         # グラフを表示
         display_func(df_all_data, df_detail)
 
-    elif mode==mode_2: # 全期間集計
+    elif mode==mode_2: # 1日集計
         df_date = pd.to_datetime(df_all_data["Date"]).dt.strftime("%Y-%m")
         date_list = df_date.drop_duplicates().sort_values(ascending=False)
         start_data = st.selectbox("年月を選択",date_list,index=0)
@@ -632,8 +633,16 @@ try:
         display_dataframe = df_all_data[df_date==start_data][name_list+["Date"]]
         # グラフを表示
         display_func(display_dataframe, df_detail, False)
+        
+    elif mode==mode_3: # シーズン集計
+        # シーズンを抽出
+        year_series = df_all_data["Date"].apply(lambda x: x.year)
+        date_list = year_series.drop_duplicates().tolist()
+        select_year = st.selectbox("シーズンを選択",date_list,index=len(season_list)-1)
+        display_dataframe = df_all_data[year_series==select_year]
+        display_func(display_dataframe, df_detail, False)
 
-    elif mode==mode_3: # 入力
+    elif mode==mode_4: # 入力
         if login_func():
             load_file = st.file_uploader("ファイルアップロード", type='json')
             if load_file:
@@ -649,7 +658,7 @@ try:
                     except:
                         st.warning("入力値が不正です")
 
-    elif mode==mode_4: # 入力済みの対局データを取得
+    elif mode==mode_5: # 入力済みの対局データを取得
         if login_func():
             gb = GridOptionsBuilder.from_dataframe(df_all_data, editable=True)
             gb.configure_selection(selection_mode="multiple", use_checkbox=True)
