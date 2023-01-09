@@ -638,7 +638,7 @@ try:
         # シーズンを抽出
         year_series = df_all_data["Date"].apply(lambda x: x.year)
         date_list = year_series.drop_duplicates().tolist()
-        select_year = st.selectbox("シーズンを選択",date_list,index=len(season_list)-1)
+        select_year = st.selectbox("シーズンを選択",date_list,index=len(date_list)-1)
         display_dataframe = df_all_data[year_series==select_year]
         display_func(display_dataframe, df_detail, False)
 
