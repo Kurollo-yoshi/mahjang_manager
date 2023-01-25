@@ -1,0 +1,7 @@
+[theme]
+# 背景色
+backgroundColor = "#2b2b2b"
+# セレクトボックス色
+secndaryBackgroundColor = "#595857"
+# テキスト
+textColor="#e5e4e6"
