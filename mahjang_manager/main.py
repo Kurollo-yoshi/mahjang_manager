@@ -619,7 +619,7 @@ db = deta.Base("mahjang_manager_db")
 df_all_data, df_detail, raw_min_date, raw_max_date = get_some_data(db)
 
 # Select Mode
-mode = st.selectbox("機能選択",[mode_1,mode_2,mode_3, mode_4])
+mode = st.selectbox("機能選択",[mode_1,mode_2,mode_3, mode_4, mode_5])
 try:
     if mode==mode_1: # 全期間集計
         # グラフを表示
