@@ -279,6 +279,7 @@ def display_deteil(detail_dataframe):
 
 def display_func(display_dataframe,detail_dataframe, all=True):
     # 順位と総得点を表示
+    print(display_dataframe)
     ranking_df = pd.DataFrame([display_dataframe.sum()[name_list]]).T
     ranking_df.columns = ["総得点"]
     ranking_df = ranking_df.sort_values("総得点", ascending=False)
