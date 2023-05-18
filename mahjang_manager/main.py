@@ -299,7 +299,7 @@ def display_func(display_dataframe,detail_dataframe, all=True):
     st.markdown("---")
     if all:
         # 詳細データを表示
-	print(detail_dataframe)
+        print(detail_dataframe)
         display_deteil(detail_dataframe)
 
 # データ操作
