@@ -222,8 +222,7 @@ def display_deteil(detail_dataframe):
     """
     sum_dataframe = create_detail(detail_dataframe)
     sum_dataframe["データ項目"] = sum_dataframe.index
-    sum_dataframe = sum_dataframe[["データ項目"] + name_list]
-    print(sum_dataframe)
+    sum_dataframe = sum_dataframe[["データ項目"] + name_list].to_frame()
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
     gb.configure_column("データ項目",header_name="データ項目",width=5)
@@ -300,7 +299,6 @@ def display_func(display_dataframe,detail_dataframe, all=True):
     st.markdown("---")
     if all:
         # 詳細データを表示
-        print(detail_dataframe)
         display_deteil(detail_dataframe)
 
 # データ操作
