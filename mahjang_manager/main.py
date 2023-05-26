@@ -233,19 +233,18 @@ def display_deteil(detail_dataframe):
     gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=[0])
     gridOptions = gb.build()
     # aggridのバージョンによってエラーになる? series関連
-    data = AgGrid(sum_dataframe)
-    # data = AgGrid(
-    #     sum_dataframe,
-    #     gridOptions=gridOptions,
-    #     enable_enterprise_modules=True,
-    #     allow_unsafe_jscode=True,
-    #     update_mode=GridUpdateMode.SELECTION_CHANGED,
-    #     theme="dark",
-    #     data_return_mode=DataReturnMode.AS_INPUT,
-    #     height= 250,
-	# width = 500
-    #     # fit_columns_on_grid_load=True
-    # )
+    data = AgGrid(
+        sum_dataframe,
+        gridOptions=gridOptions,
+        enable_enterprise_modules=True,
+        allow_unsafe_jscode=True,
+        update_mode=GridUpdateMode.SELECTION_CHANGED,
+        theme="dark",
+        # data_return_mode=DataReturnMode.AS_INPUT,
+        height= 250,
+	width = 500
+        # fit_columns_on_grid_load=True
+    )
     if len(data["selected_rows"])>0:
         sel_data = data["selected_rows"][0]
         fig = go.Figure()
