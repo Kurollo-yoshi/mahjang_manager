@@ -238,7 +238,7 @@ def display_deteil(detail_dataframe):
         gridOptions=gridOptions,
         enable_enterprise_modules=True,
         allow_unsafe_jscode=True,
-        update_mode=GridUpdateMode.SELECTION_CHANGED,
+        # update_mode=GridUpdateMode.SELECTION_CHANGED,
         theme="dark",
         # data_return_mode=DataReturnMode.AS_INPUT,
         height= 250,
