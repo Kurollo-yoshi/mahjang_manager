@@ -233,7 +233,7 @@ def display_deteil(detail_dataframe):
     gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=[0])
     gridOptions = gb.build()
     # aggridのバージョンによってエラーになる? series関連
-    data = AGgrid(sum_dataframe)
+    data = AgGrid(sum_dataframe)
     # data = AgGrid(
     #     sum_dataframe,
     #     gridOptions=gridOptions,
