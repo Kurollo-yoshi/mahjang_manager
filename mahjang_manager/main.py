@@ -232,7 +232,7 @@ def display_deteil(detail_dataframe):
     gb.configure_column("紅花さん",header_name="紅花さん",width=2)
     gb.configure_selection(selection_mode="single", use_checkbox=True,pre_selected_rows=[0])
     gridOptions = gb.build()
-    st.write(type(sum_dataframe))
+    st.write(sum_dataframe.dtypes)
     data = AgGrid(
         sum_dataframe,
         gridOptions=gridOptions,
