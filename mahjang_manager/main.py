@@ -222,7 +222,7 @@ def display_deteil(detail_dataframe):
     """
     sum_dataframe = create_detail(detail_dataframe)
     sum_dataframe["データ項目"] = sum_dataframe.index
-    sum_dataframe = sum_dataframe[["データ項目"] + name_list]
+    #sum_dataframe = sum_dataframe[["データ項目"] + name_list]
 
     gb = GridOptionsBuilder.from_dataframe(sum_dataframe)
     gb.configure_column("データ項目",header_name="データ項目",width=5)
