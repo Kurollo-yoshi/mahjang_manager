@@ -239,11 +239,11 @@ def display_deteil(detail_dataframe):
         enable_enterprise_modules=True,
         allow_unsafe_jscode=True,
         update_mode=GridUpdateMode.SELECTION_CHANGED,
-        # theme="dark",
+        theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT,
         height= 250,
 	width = 500
-        # fit_columns_on_grid_load=True
+        fit_columns_on_grid_load=True
     )
     if len(data["selected_rows"])>0:
         sel_data = data["selected_rows"][0]
