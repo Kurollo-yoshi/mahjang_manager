@@ -662,7 +662,7 @@ try:
         if login_func():
             gb = GridOptionsBuilder.from_dataframe(df_all_data, editable=True)
             gb.configure_selection(selection_mode="multiple", use_checkbox=True)
-            gb.configure_pagination(enabled=True, paginationAutoPageSize=True, paginationPageSize=10)
+            gb.configure_pagination(enabled=True, paginationAutoPageSize=False, paginationPageSize=10)
             gridOptions = gb.build()
             st.write("データを編集する際は変更後にチェックをいれること")
             data = AgGrid(
