@@ -242,7 +242,7 @@ def display_deteil(detail_dataframe):
         theme="dark",
         data_return_mode=DataReturnMode.AS_INPUT,
         height= 250,
-	width = 500
+        width = 500,
         fit_columns_on_grid_load=True
     )
     if len(data["selected_rows"])>0:
@@ -634,7 +634,7 @@ try:
         display_dataframe = df_all_data[df_date==start_data][name_list+["Date"]]
         # グラフを表示
         display_func(display_dataframe, df_detail, False)
-        
+
     elif mode==mode_3: # シーズン集計
         # シーズンを抽出
         year_series = df_all_data["Date"].apply(lambda x: x.year)
