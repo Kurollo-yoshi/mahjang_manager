@@ -672,7 +672,7 @@ try:
                 allow_unsafe_jscode=True,
                 update_mode=GridUpdateMode.SELECTION_CHANGED,
                 data_return_mode=DataReturnMode.AS_INPUT,
-                paginationAutoPageSize=true
+                paginationAutoPageSize=True
             )
 
             selection_data = data["selected_rows"]
