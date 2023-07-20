@@ -660,13 +660,13 @@ try:
 
     elif mode==mode_5: # 入力済みの対局データを取得
         if login_func():
-            gb = GridOptionsBuilder.from_dataframe(df_all_data.sort_values("Date"), editable=True)
+            gb = GridOptionsBuilder.from_dataframe(df_all_data.sort_values("Date",ascending=False), editable=True)
             gb.configure_selection(selection_mode="multiple", use_checkbox=True)
             gb.configure_pagination(enabled=True, paginationAutoPageSize=False, paginationPageSize=10)
             gridOptions = gb.build()
             st.write("データを編集する際は変更後にチェックをいれること")
             data = AgGrid(
-                df_all_data.sort_values("Date"),
+                df_all_data.sort_values("Date",ascending=False),
                 gridOptions=gridOptions,
                 enable_enterprise_modules=True,
                 allow_unsafe_jscode=True,
