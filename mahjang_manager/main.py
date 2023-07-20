@@ -337,8 +337,8 @@ def get_some_data(db):
     data_lsit = []
     detail_list = []
     for tmp_data in db.fetch().items:
-        data_lsit.append(tmp_data["value"]["result_point"]+[tmp_data["value"]["date"]]+[tmp_data["key"]])
-        detail_list.append(tmp_data["value"]["deal_num"]+tmp_data["value"]["deal_sum"]+[tmp_data["value"]["game_num"]]+tmp_data["value"]["meld_num"]+tmp_data["value"]["start_sum"]+tmp_data["value"]["win_num"]+tmp_data["value"]["win_sum"])
+        data_lsit.append(tmp_data["value"][0]["result_point"]+[tmp_data["value"][0]["date"]]+[tmp_data["key"]])
+        detail_list.append(tmp_data["value"][0]["deal_num"]+tmp_data["value"][0]["deal_sum"]+[tmp_data["value"][0]["game_num"]]+tmp_data["value"][0]["meld_num"]+tmp_data["value"][0]["start_sum"]+tmp_data["value"][0]["win_num"]+tmp_data["value"][0]["win_sum"])
 
     df_all_data = pd.DataFrame(data_lsit)
     df_all_data.columns = name_list + ["Date","key"]
