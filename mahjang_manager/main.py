@@ -22,6 +22,12 @@ from mahjong.shanten import Shanten
 #麻雀牌
 from mahjong.tile import TilesConverter
 
+st.set_page_config(
+    page_title=app_title,
+    page_icon=icon_image,
+    layout="wide"
+)
+
 ## Config
 ## ------------------------------------------------------------------------------------------------------------
 # ファイルパス
@@ -585,12 +591,6 @@ def login_func():
 
 ## Main
 ## -------------------------------------------------------------------------------
-st.set_page_config(
-    page_title=app_title,
-    page_icon=icon_image,
-    layout="wide"
-)
-
 # pai_dictの生成(pickleで読み込んだほうがいい)
 # 麻雀牌と数字の対応辞書を作成
 pai_dict = {}
