@@ -636,12 +636,6 @@ def initialize_firebase():
 # Firebaseの初期化を一度だけ実行
 initialize_firebase()
 
-# Firebaseサービスアカウントキーの取得
-cred = credentials.Certificate(st.secrets["firebase_key"])
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://mahjang-manager-99c0a-default-rtdb.firebaseio.com/'
-})
-
 # データの表示
 df_all_data, df_detail, raw_min_date, raw_max_date = get_some_data()
 
