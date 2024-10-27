@@ -334,35 +334,29 @@ def create_detail(dataframe):
     return detail
 
 def get_some_data():
-    ref = db.reference('mahjang_manager_db')  # Firebaseの参照先ノード
-    snapshot = ref.get()  # データの取得
-
-    data_list = []
-    detail_list = []
-
-    if snapshot:  # データが存在する場合のみ処理
-        for key, tmp_data in snapshot.items():
-            data_list.append(tmp_data["result_point"] + [tmp_data["date"]] + [key])
-            detail_list.append(
-                tmp_data["deal_num"] + tmp_data["deal_sum"] + [tmp_data["game_num"]] +
-                tmp_data["meld_num"] + tmp_data["start_sum"] + tmp_data["win_num"] + tmp_data["win_sum"]
-            )
-
-        # DataFrameに変換
-        df_all_data = pd.DataFrame(data_list)
-        df_all_data.columns = name_list + ["Date", "key"]
-        df_all_data["Date"] = pd.to_datetime(df_all_data["Date"])
-        df_all_data = df_all_data.sort_values("Date", ascending=True)
-
-        df_detail = pd.DataFrame(detail_list)
-        df_detail.columns = detail_columns
-
-        # データの最大、最小時間
-        raw_min_date = df_all_data["Date"].min()
-        raw_max_date = df_all_data["Date"].max()
-        return df_all_data, df_detail, raw_min_date, raw_max_date
-    else:
-        st.warning("データが存在しません。")
+    try:
+        ref = db.reference('mahjang_manager_db')  # Firebaseの参照先ノード
+        snapshot = ref.get()  # データの取得
+        
+        # データ処理
+        data_list = []
+        detail_list = []
+        
+        if snapshot:
+            for key, tmp_data in snapshot.items():
+                data_list.append(tmp_data["result_point"] + [tmp_data["date"]] + [key])
+                detail_list.append(
+                    tmp_data["deal_num"] + tmp_data["deal_sum"] + [tmp_data["game_num"]] +
+                    tmp_data["meld_num"] + tmp_data["start_sum"] + tmp_data["win_num"] + tmp_data["win_sum"]
+                )
+            df_all_data = pd.DataFrame(data_list)
+            df_detail = pd.DataFrame(detail_list)
+            return df_all_data, df_detail, None, None  # 戻り値調整
+        else:
+            st.warning("データが存在しません。")
+            return None, None, None, None
+    except Exception as e:
+        st.error(f"データベースへのアクセスに失敗しました: {e}")
         return None, None, None, None
 
 # データの表示
