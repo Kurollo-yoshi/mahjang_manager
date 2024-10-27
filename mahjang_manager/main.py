@@ -22,12 +22,6 @@ from mahjong.shanten import Shanten
 #麻雀牌
 from mahjong.tile import TilesConverter
 
-st.set_page_config(
-    page_title=app_title,
-    page_icon=icon_image,
-    layout="wide"
-)
-
 ## Config
 ## ------------------------------------------------------------------------------------------------------------
 # ファイルパス
@@ -85,6 +79,11 @@ limit_dict = {
 	"配牌向聴":None
 }
 
+st.set_page_config(
+    page_title=app_title,
+    page_icon=icon_image,
+    layout="wide"
+)
 ## Function
 ## ------------------------------------------------------------------------------------------------------------
 
