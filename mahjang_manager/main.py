@@ -344,6 +344,8 @@ def get_some_data():
         ref = db.reference('mahjang_manager_db')  # Firebaseの参照先ノード
         snapshot = ref.get()  # データの取得
         
+        st.write(snapshot)
+        
         # データ処理
         data_list = []
         detail_list = []
