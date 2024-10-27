@@ -542,8 +542,6 @@ def upload_data(jan_data):
     # データの追加
     ref.push(tmp_dict)
     st.success("データがFirebaseに登録されました")
-    send_line_notify("データが登録されました")
-    send_line_notify(tmp_dict)
 
 # 認証
 # ------------------------------------------------------------------------------------------------------------
