@@ -658,25 +658,19 @@ try:
         # グラフを表示
         display_func(display_dataframe, df_detail, False)
 
-    elif mode==mode_3: # シーズン集計
-        # シーズンを抽出
-        year_series = df_all_data["Date"].apply(lambda x: x.year)
-        date_list = year_series.drop_duplicates().tolist()
-        select_year = st.selectbox("シーズンを選択",date_list,index=len(date_list)-1)
-        display_dataframe = df_all_data[year_series==select_year]
-        display_func(display_dataframe, df_detail, False)
+    elif mode == mode_3:  # シーズン集計
+        # Date列をdatetime型に変換（必要であれば変換）
+        if not pd.api.types.is_datetime64_any_dtype(df_all_data["Date"]):
+            df_all_data["Date"] = pd.to_datetime(df_all_data["Date"], errors="coerce")
 
-    # elif mode==mode_4: # 入力
-    #     if login_func():
-    #         load_file = st.file_uploader("ファイルアップロード", type='json')
-    #         if load_file:
-    #             jan_data = json.load(load_file)
-    #             if st.button("アップロード"):
-    #                 try:
-    #                     upload_data(jan_data)
-    #                     st.success("データが登録されました")
-    #                 except:
-    #                     st.warning("入力値が不正です")
+        # シーズンを抽出
+        year_series = df_all_data["Date"].dt.year  # 年のみを取得
+        date_list = year_series.drop_duplicates().tolist()
+        select_year = st.selectbox("シーズンを選択", date_list, index=len(date_list) - 1)
+        
+        # 選択した年のデータをフィルタリング
+        display_dataframe = df_all_data[year_series == select_year]
+        display_func(display_dataframe, df_detail, False)
 
 	# 入力モードでファイルをアップロードするコード
     elif mode == mode_4:  # 入力モード
