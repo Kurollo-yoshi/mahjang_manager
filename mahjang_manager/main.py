@@ -13,7 +13,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-from deta import Deta
+import firebase_admin
+from firebase_admin import credentials, db
 
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
@@ -332,26 +333,43 @@ def create_detail(dataframe):
     detail = detail.loc[["和了率(%)","副露率(%)","平均打点","放銃率(%)","平均放銃","配牌向聴"]]
     return detail
 
-def get_some_data(db):
-    # 表示に必要な情報を取得(機能ごとに分けたほうがいいかも)
-    data_lsit = []
+def get_some_data():
+    ref = db.reference('mahjang_manager_db')  # Firebaseの参照先ノード
+    snapshot = ref.get()  # データの取得
+
+    data_list = []
     detail_list = []
-    for tmp_data in db.fetch().items:
-        data_lsit.append(tmp_data["result_point"]+[tmp_data["date"]]+[tmp_data["key"]])
-        detail_list.append(tmp_data["deal_num"]+tmp_data["deal_sum"]+[tmp_data["game_num"]]+tmp_data["meld_num"]+tmp_data["start_sum"]+tmp_data["win_num"]+tmp_data["win_sum"])
 
-    df_all_data = pd.DataFrame(data_lsit)
-    df_all_data.columns = name_list + ["Date","key"]
-    df_all_data["Date"] = pd.to_datetime(df_all_data["Date"])
-    df_all_data = df_all_data.sort_values("Date",ascending=True)
+    if snapshot:  # データが存在する場合のみ処理
+        for key, tmp_data in snapshot.items():
+            data_list.append(tmp_data["result_point"] + [tmp_data["date"]] + [key])
+            detail_list.append(
+                tmp_data["deal_num"] + tmp_data["deal_sum"] + [tmp_data["game_num"]] +
+                tmp_data["meld_num"] + tmp_data["start_sum"] + tmp_data["win_num"] + tmp_data["win_sum"]
+            )
 
-    df_detail = pd.DataFrame(detail_list)
-    df_detail.columns = detail_columns
+        # DataFrameに変換
+        df_all_data = pd.DataFrame(data_list)
+        df_all_data.columns = name_list + ["Date", "key"]
+        df_all_data["Date"] = pd.to_datetime(df_all_data["Date"])
+        df_all_data = df_all_data.sort_values("Date", ascending=True)
 
-    # データの最大、最小時間
-    raw_min_date = df_all_data["Date"].min()
-    raw_max_date = df_all_data["Date"].max()
-    return df_all_data, df_detail, raw_min_date, raw_max_date
+        df_detail = pd.DataFrame(detail_list)
+        df_detail.columns = detail_columns
+
+        # データの最大、最小時間
+        raw_min_date = df_all_data["Date"].min()
+        raw_max_date = df_all_data["Date"].max()
+        return df_all_data, df_detail, raw_min_date, raw_max_date
+    else:
+        st.warning("データが存在しません。")
+        return None, None, None, None
+
+# データの表示
+df_all_data, df_detail, raw_min_date, raw_max_date = get_some_data()
+if df_all_data is not None:
+    st.write("All Data", df_all_data)
+    st.write("Detail Data", df_detail)
 
 def pai_num2name(pai_num):
     """牌番号を牌名に変換
@@ -515,22 +533,17 @@ def reshape_data(data_json):
     except Exception as e:
         raise
 
-# 通知
-# ------------------------------------------------------------------------------------------------------------
-def send_line_notify(notification_message):
-    """
-    LINEに通知する
-    """
-    if "send" not in st.session_state:
-        st.session_state.send = False
-    if st.session_state.send:
-        return True
-    line_notify_token = 'A4aDm0dKREXD9ydI3n6lSCmweLqnilW5qJYCMD1Zctf'
-    line_notify_api = 'https://notify-api.line.me/api/notify'
-    headers = {'Authorization': f'Bearer {line_notify_token}'}
-    data = {'message': f'message: {notification_message}'}
-    requests.post(line_notify_api, headers = headers, data = data)
-    st.session_state.send = True
+# Firebaseにデータを書き込む関数
+def upload_data(jan_data):
+    ref = db.reference('mahjang_manager_db')
+    tmp_dict, player_name = reshape_data(jan_data)  # データ整形（既存のreshape_data関数）
+    assert name_list == sorted(player_name)  # データの整合性確認
+
+    # データの追加
+    ref.push(tmp_dict)
+    st.success("データがFirebaseに登録されました")
+    send_line_notify("データが登録されました")
+    send_line_notify(tmp_dict)
 
 # 認証
 # ------------------------------------------------------------------------------------------------------------
@@ -583,7 +596,6 @@ st.set_page_config(
     page_icon=icon_image,
     layout="wide"
 )
-send_line_notify("システムが起動しました")
 
 # pai_dictの生成(pickleで読み込んだほうがいい)
 # 麻雀牌と数字の対応辞書を作成
@@ -612,11 +624,14 @@ st.title(app_title)
 header_img = Image.open(header_image)
 st.image(header_img,use_column_width=True)
 
-# Detaに接続
-deta = Deta(st.secrets["deta_key"])
-db = deta.Base("mahjang_manager_db")
+# Firebaseサービスアカウントキーの取得
+cred = credentials.Certificate(st.secrets["firebase_key"])
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://mahjang-manager-99c0a-default-rtdb.firebaseio.com/'
+})
 
-df_all_data, df_detail, raw_min_date, raw_max_date = get_some_data(db)
+# データの表示
+df_all_data, df_detail, raw_min_date, raw_max_date = get_some_data()
 
 # Select Mode
 mode = st.selectbox("機能選択",[mode_1,mode_2,mode_3, mode_4, mode_5])
@@ -649,12 +664,8 @@ try:
                 jan_data = json.load(load_file)
                 if st.button("アップロード"):
                     try:
-                        tmp_dict, player_name = reshape_data(jan_data)
-                        assert name_list==sorted(player_name)
-                        db.put(tmp_dict)
+                        upload_data(jan_data)
                         st.success("データが登録されました")
-                        send_line_notify("データが登録されました")
-                        send_line_notify(tmp_dict)
                     except:
                         st.warning("入力値が不正です")
 
@@ -677,10 +688,8 @@ try:
             selection_data = data["selected_rows"]
 
             if st.button("削除"):
-                send_line_notify("データが削除されました")
                 for i in range(len(selection_data)):
                     db.delete(selection_data[i]["key"])
-                    send_line_notify(selection_data[i])
                 st.success("データが削除されました")
 
 except Exception as e:
