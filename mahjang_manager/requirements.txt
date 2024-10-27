@@ -9,4 +9,4 @@ mahjong==1.2.0
 matplotlib==3.5.3
 requests==2.27.1
 click==7.1.2
-deta
+firebase-admin
