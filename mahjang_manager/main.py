@@ -1,6 +1,7 @@
 ## 月一友人戦成績管理
 ## ------------------------------------------------------------------------------------------------------------
 import json
+import tempfile
 from re import A
 import sqlite3
 import datetime
