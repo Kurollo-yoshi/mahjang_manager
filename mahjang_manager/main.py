@@ -365,10 +365,6 @@ def get_some_data():
             df_all_data = pd.DataFrame(data_list, columns=name_list + ["Date", "key"])
             df_detail = pd.DataFrame(detail_list, columns=detail_columns)
 
-            # データの確認用表示
-            st.write("All Data:", df_all_data)
-            st.write("Detail Data:", df_detail)
-
             return df_all_data, df_detail, None, None
         else:
             st.warning("データが存在しません。")
@@ -379,9 +375,6 @@ def get_some_data():
 
 # データの表示
 df_all_data, df_detail, raw_min_date, raw_max_date = get_some_data()
-if df_all_data is not None:
-    st.write("All Data", df_all_data)
-    st.write("Detail Data", df_detail)
 
 def pai_num2name(pai_num):
     """牌番号を牌名に変換
