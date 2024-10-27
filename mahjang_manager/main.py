@@ -624,12 +624,16 @@ st.title(app_title)
 header_img = Image.open(header_image)
 st.image(header_img,use_column_width=True)
 
-# Firebase初期化（重複しないように確認）
-if not firebase_admin._apps:
-    cred = credentials.Certificate(st.secrets["firebase_key"])
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://your-database-name.firebaseio.com'
-    })
+# Firebaseの初期化（重複しないように確認）
+if not firebase_admin._apps:  # 初期化が行われていない場合にのみ実行
+    try:
+        cred = credentials.Certificate(st.secrets["firebase_key"])
+        firebase_admin.initialize_app(cred, {
+            'databaseURL': 'https://mahjang-manager-99c0a-default-rtdb.firebaseio.com/'
+        })
+        st.write("Firebaseが初期化されました。")
+    except Exception as e:
+        st.error(f"Firebaseの初期化に失敗しました: {e}")
 
 # Firebaseサービスアカウントキーの取得
 cred = credentials.Certificate(st.secrets["firebase_key"])
