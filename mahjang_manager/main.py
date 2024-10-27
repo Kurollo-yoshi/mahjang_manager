@@ -618,16 +618,17 @@ st.title(app_title)
 header_img = Image.open(header_image)
 st.image(header_img,use_column_width=True)
 
-# Firebaseの初期化（重複しないように確認）
-if not firebase_admin._apps:  # 初期化が行われていない場合にのみ実行
-    try:
+# Firebase初期化関数をキャッシュして一度だけ実行
+@st.cache_resource
+def initialize_firebase():
+    if not firebase_admin._apps:  # Firebaseの初期化が行われていない場合のみ実行
         cred = credentials.Certificate(st.secrets["firebase_key"])
         firebase_admin.initialize_app(cred, {
             'databaseURL': 'https://mahjang-manager-99c0a-default-rtdb.firebaseio.com/'
         })
-        st.write("Firebaseが初期化されました。")
-    except Exception as e:
-        st.error(f"Firebaseの初期化に失敗しました: {e}")
+
+# Firebaseの初期化を一度だけ実行
+initialize_firebase()
 
 # Firebaseサービスアカウントキーの取得
 cred = credentials.Certificate(st.secrets["firebase_key"])
