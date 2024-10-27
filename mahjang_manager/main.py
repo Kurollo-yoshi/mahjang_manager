@@ -623,7 +623,6 @@ st.image(header_img,use_column_width=True)
 def initialize_firebase():
     # 一時ファイルを作成して、secretsの内容を書き込み
     with tempfile.NamedTemporaryFile(delete=False, mode="w") as temp_file:
-        # st.secrets["firebase_key"] を dict に変換
         json.dump(dict(st.secrets["firebase_key"]), temp_file)
         temp_file_path = temp_file.name
     
