@@ -685,23 +685,23 @@ try:
                 success_count = 0
                 fail_count = 0
 
-            # 各ファイルをループで処理
-            for load_file in uploaded_files:
-                try:
-                    # JSONデータを読み込み
-                    jan_data = json.load(load_file)
-                    # データをアップロード
-                    upload_data(jan_data)
-                    success_count += 1
-                except Exception as e:
-                    # エラーが発生したファイルのカウント
-                    fail_count += 1
-                    st.warning(f"{load_file.name} の入力値が不正です: {e}")
+                # 各ファイルをループで処理
+                for load_file in uploaded_files:
+                    try:
+                        # JSONデータを読み込み
+                        jan_data = json.load(load_file)
+                        # データをアップロード
+                        upload_data(jan_data)
+                        success_count += 1
+                    except Exception as e:
+                        # エラーが発生したファイルのカウント
+                        fail_count += 1
+                        st.warning(f"{load_file.name} の入力値が不正です: {e}")
 
-            # アップロード結果を表示
-            st.success(f"{success_count} 件のファイルが登録されました")
-            if fail_count > 0:
-                st.warning(f"{fail_count} 件のファイルの登録に失敗しました")
+                # アップロード結果を表示
+                st.success(f"{success_count} 件のファイルが登録されました")
+                if fail_count > 0:
+                    st.warning(f"{fail_count} 件のファイルの登録に失敗しました")
 
 
     elif mode==mode_5: # 入力済みの対局データを取得
