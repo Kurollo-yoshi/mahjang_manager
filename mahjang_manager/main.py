@@ -341,25 +341,35 @@ def create_detail(dataframe):
 
 def get_some_data():
     try:
-        ref = db.reference('mahjang_manager_db')  # Firebaseの参照先ノード
-        snapshot = ref.get()  # データの取得
-        
-        st.write(snapshot)
-        
-        # データ処理
+        ref = db.reference('mahjang_manager_db')
+        snapshot = ref.get()
+
+        # データを格納するリスト
         data_list = []
         detail_list = []
-        
+
         if snapshot:
             for key, tmp_data in snapshot.items():
-                data_list.append(tmp_data["result_point"] + [tmp_data["date"]] + [key])
-                detail_list.append(
-                    tmp_data["deal_num"] + tmp_data["deal_sum"] + [tmp_data["game_num"]] +
-                    tmp_data["meld_num"] + tmp_data["start_sum"] + tmp_data["win_num"] + tmp_data["win_sum"]
-                )
-            df_all_data = pd.DataFrame(data_list)
-            df_detail = pd.DataFrame(detail_list)
-            return df_all_data, df_detail, None, None  # 戻り値調整
+                # 各データを確認しながらリストに追加
+                result_point = tmp_data.get("result_point", [0, 0, 0, 0])
+                date = tmp_data.get("date", "")
+
+                # 取得したデータを追加
+                data_list.append(result_point + [date, key])
+
+                detail_data = tmp_data.get("deal_num", []) + tmp_data.get("deal_sum", []) + [tmp_data.get("game_num", 0)] + tmp_data.get("meld_num", []) + tmp_data.get("start_sum", []) + tmp_data.get("win_num", []) + tmp_data.get("win_sum", [])
+
+                detail_list.append(detail_data)
+
+            # DataFrameに変換し、カラム名を設定
+            df_all_data = pd.DataFrame(data_list, columns=name_list + ["Date", "key"])
+            df_detail = pd.DataFrame(detail_list, columns=detail_columns)
+
+            # データの確認用表示
+            st.write("All Data:", df_all_data)
+            st.write("Detail Data:", df_detail)
+
+            return df_all_data, df_detail, None, None
         else:
             st.warning("データが存在しません。")
             return None, None, None, None
