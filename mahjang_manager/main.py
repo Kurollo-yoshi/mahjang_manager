@@ -624,6 +624,13 @@ st.title(app_title)
 header_img = Image.open(header_image)
 st.image(header_img,use_column_width=True)
 
+# Firebase初期化（重複しないように確認）
+if not firebase_admin._apps:
+    cred = credentials.Certificate(st.secrets["firebase_key"])
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://your-database-name.firebaseio.com'
+    })
+
 # Firebaseサービスアカウントキーの取得
 cred = credentials.Certificate(st.secrets["firebase_key"])
 firebase_admin.initialize_app(cred, {
