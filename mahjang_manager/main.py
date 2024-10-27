@@ -709,52 +709,52 @@ try:
                     st.warning(f"{fail_count} 件のファイルの登録に失敗しました")
 
 
-elif mode == mode_5:  # 入力済みの対局データを取得
-    if login_func():
-        # グリッドオプションの設定
-        gb = GridOptionsBuilder.from_dataframe(df_all_data.sort_values("Date", ascending=False), editable=True)
-        gb.configure_selection(selection_mode="multiple", use_checkbox=True)
-        gb.configure_pagination(enabled=True, paginationAutoPageSize=False, paginationPageSize=10)
-        gridOptions = gb.build()
+    elif mode == mode_5:  # 入力済みの対局データを取得
+        if login_func():
+            # グリッドオプションの設定
+            gb = GridOptionsBuilder.from_dataframe(df_all_data.sort_values("Date", ascending=False), editable=True)
+            gb.configure_selection(selection_mode="multiple", use_checkbox=True)
+            gb.configure_pagination(enabled=True, paginationAutoPageSize=False, paginationPageSize=10)
+            gridOptions = gb.build()
 
-        st.write("データを編集後、「更新」ボタンを押してください。")
+            st.write("データを編集後、「更新」ボタンを押してください。")
 
-        # AgGridでテーブル表示
-        data = AgGrid(
-            df_all_data.sort_values("Date", ascending=False),
-            gridOptions=gridOptions,
-            enable_enterprise_modules=True,
-            allow_unsafe_jscode=True,
-            update_mode=GridUpdateMode.MODEL_CHANGED,  # モデル変更時にデータを取得
-            data_return_mode=DataReturnMode.FILTERED_AND_SORTED,
-        )
+            # AgGridでテーブル表示
+            data = AgGrid(
+                df_all_data.sort_values("Date", ascending=False),
+                gridOptions=gridOptions,
+                enable_enterprise_modules=True,
+                allow_unsafe_jscode=True,
+                update_mode=GridUpdateMode.MODEL_CHANGED,  # モデル変更時にデータを取得
+                data_return_mode=DataReturnMode.FILTERED_AND_SORTED,
+            )
 
-        # 選択された行データ
-        selection_data = data["selected_rows"]
+            # 選択された行データ
+            selection_data = data["selected_rows"]
 
-        # 削除機能の実装
-        if st.button("削除"):
-            if selection_data:
-                for row in selection_data:
+            # 削除機能の実装
+            if st.button("削除"):
+                if selection_data:
+                    for row in selection_data:
+                        if "key" in row:
+                            db.reference(f'mahjang_manager_db/{row["key"]}').delete()
+                    st.success("選択したデータが削除されました。")
+                    st.experimental_rerun()  # ページをリフレッシュして削除を反映
+                else:
+                    st.warning("削除するデータを選択してください。")
+
+            # 更新機能の実装
+            if st.button("更新"):
+                # データ全体を取得してFirebaseに反映
+                for row in data["data"]:
                     if "key" in row:
-                        db.reference(f'mahjang_manager_db/{row["key"]}').delete()
-                st.success("選択したデータが削除されました。")
-                st.experimental_rerun()  # ページをリフレッシュして削除を反映
-            else:
-                st.warning("削除するデータを選択してください。")
-
-        # 更新機能の実装
-        if st.button("更新"):
-            # データ全体を取得してFirebaseに反映
-            for row in data["data"]:
-                if "key" in row:
-                    # Firebaseの対象キーに基づいてデータを更新
-                    db.reference(f'mahjang_manager_db/{row["key"]}').update({
-                        "result_point": row[name_list].tolist(),
-                        "date": row["Date"],
-                        # 必要に応じて他のカラムも更新
-                    })
-            st.success("データが更新されました。")
+                        # Firebaseの対象キーに基づいてデータを更新
+                        db.reference(f'mahjang_manager_db/{row["key"]}').update({
+                            "result_point": row[name_list].tolist(),
+                            "date": row["Date"],
+                            # 必要に応じて他のカラムも更新
+                        })
+                st.success("データが更新されました。")
 
 except Exception as e:
     raise
