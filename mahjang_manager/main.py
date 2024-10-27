@@ -745,16 +745,21 @@ try:
 
             # 更新機能の実装
             if st.button("更新"):
-                # データ全体を取得してFirebaseに反映
-                for row in data["data"]:
-                    if "key" in row:
-                        # Firebaseの対象キーに基づいてデータを更新
-                        db.reference(f'mahjang_manager_db/{row["key"]}').update({
-                            "result_point": row[name_list].tolist(),
-                            "date": row["Date"],
-                            # 必要に応じて他のカラムも更新
-                        })
-                st.success("データが更新されました。")
+                # DataFrameが空でないことを確認してから更新処理を行う
+                if not data["data"].empty:
+                    for i in range(len(data["data"])):
+                        row = data["data"].iloc[i]
+                        if "key" in row:
+                            # Firebaseの対象キーに基づいてデータを更新
+                            db.reference(f'mahjang_manager_db/{row.at["key"]}').update({
+                                "result_point": row[name_list].tolist(),
+                                "date": row["Date"],
+                                # 必要に応じて他のカラムも更新
+                            })
+                    st.success("データが更新されました。")
+                    st.experimental_rerun()  # ページをリフレッシュして更新を反映
+                else:
+                    st.warning("更新するデータがありません。")
 
 except Exception as e:
     raise
