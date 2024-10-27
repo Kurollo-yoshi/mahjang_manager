@@ -620,8 +620,14 @@ st.image(header_img,use_column_width=True)
 # Firebase初期化関数をキャッシュして一度だけ実行
 @st.cache_resource
 def initialize_firebase():
-    if not firebase_admin._apps:  # Firebaseの初期化が行われていない場合のみ実行
-        cred = credentials.Certificate(st.secrets["firebase_key"])
+    # 一時ファイルを作成して、secretsの内容を書き込み
+    with tempfile.NamedTemporaryFile(delete=False, mode="w") as temp_file:
+        json.dump(st.secrets["firebase_key"], temp_file)
+        temp_file_path = temp_file.name
+    
+    # Firebaseの初期化
+    if not firebase_admin._apps:  # Firebaseがまだ初期化されていない場合のみ実行
+        cred = credentials.Certificate(temp_file_path)
         firebase_admin.initialize_app(cred, {
             'databaseURL': 'https://mahjang-manager-99c0a-default-rtdb.firebaseio.com/'
         })
