@@ -365,6 +365,10 @@ def get_some_data():
             df_all_data = pd.DataFrame(data_list, columns=name_list + ["Date", "key"])
             df_detail = pd.DataFrame(detail_list, columns=detail_columns)
 
+            # データの確認用表示
+            st.write("All Data:", df_all_data)
+            st.write("Detail Data:", df_detail)
+
             return df_all_data, df_detail, None, None
         else:
             st.warning("データが存在しません。")
@@ -375,6 +379,9 @@ def get_some_data():
 
 # データの表示
 df_all_data, df_detail, raw_min_date, raw_max_date = get_some_data()
+if df_all_data is not None:
+    st.write("All Data", df_all_data)
+    st.write("Detail Data", df_detail)
 
 def pai_num2name(pai_num):
     """牌番号を牌名に変換
@@ -709,28 +716,53 @@ try:
                     st.warning(f"{fail_count} 件のファイルの登録に失敗しました")
 
 
-    elif mode==mode_5: # 入力済みの対局データを取得
+    elif mode == mode_5:  # 入力済みの対局データを取得
         if login_func():
-            gb = GridOptionsBuilder.from_dataframe(df_all_data.sort_values("Date",ascending=False), editable=True)
+            # グリッドオプションの設定
+            gb = GridOptionsBuilder.from_dataframe(df_all_data.sort_values("Date", ascending=False), editable=True)
             gb.configure_selection(selection_mode="multiple", use_checkbox=True)
             gb.configure_pagination(enabled=True, paginationAutoPageSize=False, paginationPageSize=10)
             gridOptions = gb.build()
-            st.write("データを編集する際は変更後にチェックをいれること")
+
+            st.write("データを編集する際は変更後にチェックを入れてください。")
+
+            # AgGridでテーブル表示
             data = AgGrid(
-                df_all_data.sort_values("Date",ascending=False),
+                df_all_data.sort_values("Date", ascending=False),
                 gridOptions=gridOptions,
                 enable_enterprise_modules=True,
                 allow_unsafe_jscode=True,
-                update_mode=GridUpdateMode.SELECTION_CHANGED,
-                data_return_mode=DataReturnMode.AS_INPUT
+                update_mode=GridUpdateMode.MODEL_CHANGED,
+                data_return_mode=DataReturnMode.FILTERED_AND_SORTED,
             )
 
+            # 選択された行データ
             selection_data = data["selected_rows"]
 
+            # 削除機能の実装
             if st.button("削除"):
-                for i in range(len(selection_data)):
-                    db.delete(selection_data[i]["key"])
-                st.success("データが削除されました")
+                if selection_data:
+                    for row in selection_data:
+                        if "key" in row:
+                            db.reference(f'mahjang_manager_db/{row["key"]}').delete()
+                    st.success("選択したデータが削除されました。")
+                else:
+                    st.warning("削除するデータを選択してください。")
+
+            # 更新機能の実装
+            if st.button("更新"):
+                if data["data"]:
+                    for i, row in enumerate(data["data"]):
+                        if "key" in row:
+                            # Firebaseの対象キーに基づいてデータを更新
+                            db.reference(f'mahjang_manager_db/{row["key"]}').update({
+                                "result_point": row[name_list].tolist(),
+                                "date": row["Date"],
+                                # 必要に応じて他のカラムも更新
+                            })
+                    st.success("データが更新されました。")
+                else:
+                    st.warning("更新するデータがありません。")
 
 except Exception as e:
     raise
